@@ -80,6 +80,81 @@
             gap: 10px;
             margin-top: 20px;
         }
+		
+		:root {
+		  --darkbg: #251d29;
+		  --darkt: #ffd1f7;
+		  --lightbg: #fff;
+		  --lightt: #d43370;
+
+		  --toggleHeight: 16em;
+		  --toggleWidth: 30em;
+		  --toggleBtnRadius: 10em;
+
+		  --bgColor--night: #423966;
+		  --mooncolor: #d9fbff;
+		  --bgColor--day: #9ee3fb;
+		}
+		body {
+		  transition: all 0.2s ease-in-out;
+		  background: var(--darkbg);
+		  color: var(--darkt);
+		  text-align: center;
+		}
+		.light {
+		  background: var(--lightbg);
+		  color: var(--lightt);
+		}
+		.tdnn {
+		  cursor: pointer;
+		  margin: 0 auto;
+		  /*change size of toggle with font-size*/
+		  font-size: 30%;
+		  margin-top: 10em;
+		  position: relative;
+		  height: var(--toggleHeight);
+		  width: var(--toggleWidth);
+		  border-radius: var(--toggleHeight);
+		  transition: all 500ms ease-in-out;
+		  background: var(--bgColor--night);
+		}
+		.day {
+		  background: #ffbf71;
+		}
+		.moon {
+		  position: absolute;
+		  display: block;
+		  border-radius: 50%;
+		  transition: all 400ms ease-in-out;
+		  top: 3em;
+		  left: 3em;
+		  transform: rotate(-75deg);
+		  width: var(--toggleBtnRadius);
+		  height: var(--toggleBtnRadius);
+		  background: var(--bgColor--night);
+		  box-shadow: 3em 2.5em 0 0em var(--mooncolor) inset,
+			rgba(255, 255, 255, 0.1) 0em -7em 0 -4.5em,
+			rgba(255, 255, 255, 0.1) 3em 7em 0 -4.5em,
+			rgba(255, 255, 255, 0.1) 2em 13em 0 -4em,
+			rgba(255, 255, 255, 0.1) 6em 2em 0 -4.1em,
+			rgba(255, 255, 255, 0.1) 8em 8em 0 -4.5em,
+			rgba(255, 255, 255, 0.1) 6em 13em 0 -4.5em,
+			rgba(255, 255, 255, 0.1) -4em 7em 0 -4.5em,
+			rgba(255, 255, 255, 0.1) -1em 10em 0 -4.5em;
+		}
+		.sun {
+		  top: 4.5em;
+		  left: 18em;
+		  transform: rotate(0deg);
+		  width: 7em;
+		  height: 7em;
+		  background: #fff;
+		  box-shadow: 3em 3em 0 5em #fff inset, 0 -5em 0 -2.7em #fff,
+			3.5em -3.5em 0 -3em #fff, 5em 0 0 -2.7em #fff, 3.5em 3.5em 0 -3em #fff,
+			0 5em 0 -2.7em #fff, -3.5em 3.5em 0 -3em #fff, -5em 0 0 -2.7em #fff,
+			-3.5em -3.5em 0 -3em #fff;
+		}
+
     </style>
 </head>
 <body>
@@ -87,16 +162,18 @@
         <div class="progress-section">
             <h3>Progress to 50</h3>
             <div class="item">Current Level: <input type="number" id="currentLevel" min="1" max="49" value="1" oninput="updateProgress()"></div>
-            <div class="item">Estimated XP Remaining: <span id="xpRemaining">21100</span></div>
+            <div class="item">Estimated XP Remaining: <span id="xpRemaining">&nbsp;21100</span></div>
+
         </div>
         
         <div class="total"><br>Total XP: <span id="totalXP">0</span></div>
 
         <div class="section">
             <h3>World</h3>
+			
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
-            <div class="item"><input type="checkbox" data-xp="200" onchange="updateTotal()"> Clue Pickup (200 XP)</div>
+            <div class="item"><input type="checkbox" data-xp="200" onchange="updateTotal()">Clue Pickup (200 XP)</div>
             <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair Discovered (100 XP)</div>
             <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 1 Kill (400 XP)</div>
             <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 2 Kill (400 XP)</div>
@@ -115,9 +192,9 @@
     
     <script>
         const creatures = {
-            "Leech": 10, "Grunt": 20, "Hellhound": 40, "Waterdevil": 20,
-            "Hive": 60, "Immolator": 60, "Armoured": 60, "Meathead": 300,
-            "Revive Partner": 100, "Kill Teammate": -500, "Kill Hunter": 450
+            "&nbsp;Leech": 10, "&nbsp;Grunt": 20, "&nbsp;Hellhound": 40, "&nbsp;Waterdevil": 20,
+            "&nbsp;Hive": 60, "&nbsp;Immolator": 60, "&nbsp;Armoured": 60, "&nbsp;Meathead": 300,
+            "&nbsp;Revive Partner": 100, "&nbsp;Kill Teammate": -500, "&nbsp;Kill Hunter": 450
         };
 
         let creatureContainer = document.getElementById("creatures");
@@ -172,10 +249,13 @@
             document.getElementById("xpRemaining").textContent = Math.max(0, neededXP);
         }
 
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle("toggleDarkMode");
-        }
+
+		function tdnn() {
+		document.getElementsByClassName("moon")[0].classList.toggle("sun");
+		document.getElementsByClassName("tdnn")[0].classList.toggle("day");
+		document.getElementsByTagName("BODY")[0].classList.toggle("light");
+		}
+
     </script>
 
     <div class="footer">
@@ -183,12 +263,9 @@
         <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
             <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 150px !important;" >
         </a>
-        <p style="font-size: 9px; text-align: center;">Dark Mode
-            <label class="switch">
-                <input type="checkbox" id="Toggle" onchange="toggleDarkMode()">
-                <span class="slider"></span>
-            </label>
-        </p>
-    </div>
+	    <div onclick="tdnn()" class="tdnn">
+		<div class="moon">
+		</div>
+		</div>
 </body>
 </html>

@@ -159,37 +159,44 @@
 </head>
 <body>
     <div>
+	
+
         <div class="progress-section">
             <h3>Progress to 50</h3>
             <div class="item">Current Level:&nbsp;<input type="number" id="currentLevel" min="1" max="49" value="1" oninput="updateProgress()"></div>
             <div class="item">Estimated XP Remaining:&nbsp;<span id="xpRemaining">&nbsp;21100</span></div>
-
+			<button onclick="resetFields()">Reset</button>
         </div>
         
         <div class="total"><br>Total XP: <span id="totalXP">0</span></div>
 
         <div class="section">
-            <h3>World</h3>
+            <h3></h3>
 			
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
-            <div class="item"><input type="checkbox" data-xp="200" onchange="updateTotal()">Clue Pickup (200 XP)</div>
-            <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair Discovered (100 XP)</div>
+			<div class="item">
+				Clues (200 XP): 
+				<input type="number" id="cluepickups" placeholder="# of Clues Found" oninput="updateTotal(); validateClueInput();" min="0" max="6">
+			</div>
+			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 1 Discovered (100 XP)</div>
+			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 2 Discovered (100 XP)</div>
             <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 1 Kill (400 XP)</div>
             <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 2 Kill (400 XP)</div>
             <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 1 Banish (350 XP)</div>
             <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 2 Banish (350 XP)</div>
             <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
-            <div class="item">Extraction Time: <input type="text" id="extractionTime" placeholder="MM" oninput="updateTotal()" maxlength="2"></div>
+            <div class="item">Extraction Time: <input type="text" id="extractionTime" placeholder="Minutes Left" oninput="updateTotal()" maxlength="2"></div>
             <div class="item">XP Envelopes (500 XP): <input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2"></div>
         </div>
 
         <div class="section">
-            <h3>Creatures</h3>
+            <h3></h3>
             <div id="creatures"></div>
         </div>
     </div>
-    
+
+
     <script>
         const creatures = {
             "&nbsp;Leech": 10, "&nbsp;Grunt": 20, "&nbsp;Hellhound": 40, "&nbsp;Waterdevil": 20,
@@ -210,51 +217,93 @@
             creatureContainer.appendChild(div);
         }
 
-        function adjustCount(button, change) {
-            let input = button.parentElement.querySelector("input");
-            let newValue = Math.max(0, parseInt(input.value) + change);
-            input.value = newValue;
-            updateTotal();
-        }
+function adjustCount(button, change) {
+    let input = button.parentElement.querySelector("input");
+    let newValue = Math.max(0, parseInt(input.value) + change);
+    input.value = newValue;
+    updateTotal();
+}
 
-        function updateTotal() {
-            let totalXP = 0;
-            let multiplier = 1;
-            if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
-            if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
+function updateTotal() {
+    let totalXP = 0;
+    let multiplier = 1;
+    if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
+    if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
 
-            document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
-                totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
-            });
+    document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
+        totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
+    });
 
-            document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
-                let xp = parseInt(input.value) * parseInt(input.getAttribute("data-xp")) || 0;
-                totalXP += xp * multiplier;
-            });
+    document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
+        let xp = parseInt(input.value) * parseInt(input.getAttribute("data-xp")) || 0;
+        totalXP += xp * multiplier;
+    });
 
-            let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
-            totalXP += extraction * 4 * multiplier;
+    // Add XP for clue pickups
+    let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
+    totalXP += cluepickups * 200 * multiplier;  // 200 XP per clue, multiplied by the multiplier
 
-            let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
-            totalXP += envelope * 500;
+    let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
+    totalXP += extraction * 4 * multiplier;
 
-            document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
-            updateProgress();
-        }
+    let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
+    totalXP += envelope * 500;
 
-        function updateProgress() {
-            let level = parseInt(document.getElementById("currentLevel").value) || 1;
-            const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
-            let neededXP = 21100 - (xpTable[level - 1] + parseInt(document.getElementById("totalXP").textContent));
-            document.getElementById("xpRemaining").textContent = Math.max(0, neededXP);
-        }
+    document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
+    updateProgress();
+}
+
+function updateProgress() {
+    let level = parseInt(document.getElementById("currentLevel").value) || 1;
+    const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
+    let neededXP = 21100 - (xpTable[level - 1] + parseInt(document.getElementById("totalXP").textContent));
+    document.getElementById("xpRemaining").textContent = Math.max(0, neededXP);
+}
+
+function validateClueInput() {
+    let cluepickupsInput = document.getElementById("cluepickups");
+    let value = parseInt(cluepickupsInput.value) || 0;
+    if (value > 6) {
+        cluepickupsInput.value = 6;
+    } else if (value < 0) {
+        cluepickupsInput.value = 0;
+    }
+    updateTotal();
+}
 
 
-		function tdnn() {
-		document.getElementsByClassName("moon")[0].classList.toggle("sun");
-		document.getElementsByClassName("tdnn")[0].classList.toggle("day");
-		document.getElementsByTagName("BODY")[0].classList.toggle("light");
-		}
+function tdnn() {
+document.getElementsByClassName("moon")[0].classList.toggle("sun");
+document.getElementsByClassName("tdnn")[0].classList.toggle("day");
+document.getElementsByTagName("BODY")[0].classList.toggle("light");
+}
+
+function resetFields() {
+    // Reset the number inputs to 0
+    document.querySelectorAll("input[type='number']").forEach(input => {
+        input.value = 0;
+    });
+
+    // Reset the text inputs to blank
+    document.querySelectorAll("input[type='text']").forEach(input => {
+        input.value = '';
+    });
+
+    // Uncheck all checkboxes
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Reset total XP and XP remaining
+    document.getElementById("totalXP").textContent = '0';
+    document.getElementById("xpRemaining").textContent = '21100';
+
+    // Reset the current level to 1
+    document.getElementById("currentLevel").value = 1;
+
+    // Call updateTotal to recalculate based on the reset values
+    updateTotal();
+}
 
     </script>
 

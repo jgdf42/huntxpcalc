@@ -159,6 +159,35 @@
 			-3.5em -3.5em 0 -3em #fff;
 		}
 
+
+		.tooltip-trigger {
+		  position: relative; /* Needed for positioning the tooltip */
+		  cursor: pointer; /* Indicate it's clickable */
+		}
+
+		.tooltip-content {
+		  display: none; /* Initially hidden */
+		  position: absolute; /* Position relative to the trigger */
+		  top: 15px; /* Adjust as needed */
+		  left: 0; /* Or right: 0; for right alignment */
+		  background-color: #000000; /* Tooltip background color */
+		  border: 1px solid #ccc; /* Tooltip border */
+		  padding: 5px;
+		  border-radius: 5px;
+		  z-index: 1; /* Ensure it's above other content */
+		  white-space: nowrap; /* Prevent tooltip from wrapping */
+		}
+
+		.tooltip-trigger:hover .tooltip-content {
+		  display: block; /* Show on hover */
+		}
+
+		/* Optional: Style the superscript */
+		sup {
+		  font-size: smaller;
+		  vertical-align: super;
+		}
+
     </style>
 </head>
 <body>
@@ -178,17 +207,32 @@
         <div class="section">
             <h3></h3>
 			
-            <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
+            <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)
+						  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(Does Not Affect XP Envelopes)</span>
+			  </sup></div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
 			<div class="item">
 				<input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
 				Solo VS Duo (600 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(aka Underdog Bonus)<p>applies only if extracting with bounty</span>
+			  </sup>
 			</div>
 			<div class="item">
 				<input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
 				Solo VS Trio (2400 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(aka Underdog Bonus)<p>applies only if extracting with bounty</span>
+			  </sup>
 			</div>
-            <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
+			<div class="item">
+			  <input type="checkbox" data-xp="100" onchange="updateTotal()">
+			  Clean Sweep (100 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(Kill, Banish and Extract)</span>
+			  </sup>
+			</div>
 			<div class="item"> 
 				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
 				&nbsp;Clues Found (200 XP)
@@ -199,14 +243,18 @@
 			</div>
 			<div class="item">
 				<input type="number" id="bosskills" placeholder="#" oninput="updateTotal(); validateBossInput();" min="0" max="2">
-				&nbsp;Boss Kills (400 XP)
+				&nbsp;Boss Kills [Team Queue] (400 XP)
+			</div>
+			<div class="item">
+				<input type="number" id="solobosskills" placeholder="#" oninput="updateTotal(); validatesoloBossInput();" min="0" max="2">
+				&nbsp;Boss Kills [Solo Queue] (800 XP)
 			</div>
 			<div class="item">
 				<input type="number" id="banishpickups" placeholder="#" oninput="updateTotal(); validateBanishInput();" min="0" max="2">
 				&nbsp;Boss Banishes (350 XP)
 			</div>
 
-            <div class="item"><input type="text" id="extractionTime" placeholder="Minutes" oninput="updateTotal()" maxlength="2">&nbsp;Extraction Time</div>
+            <div class="item"><input type="text" id="extractionTime" placeholder="Minutes" oninput="updateTotal()" maxlength="2">&nbsp;Extraction Time (16 XP per min left)</div>
             <div class="item"><input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2">&nbsp;XP Envelopes (500 XP)</div>
         </div>
 
@@ -270,6 +318,9 @@ function updateTotal() {
 
 	let bosskills = parseInt(document.getElementById("bosskills").value) || 0;  // Get boss kills VALUE
 	totalXP += bosskills * 400 * multiplier;
+
+	let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;  // Get solo boss kills VALUE
+	totalXP += solobosskills * 800 * multiplier;
 
 	let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0; // Get banishes VALUE
 	totalXP += banishpickups * 350 * multiplier;
@@ -335,7 +386,16 @@ function validateBossInput() {
     updateTotal();
 }
 
-
+function validatesoloBossInput() {
+    let solobosskillsInput = document.getElementById("solobosskills");
+    let value = parseInt(solobosskillsInput.value) || 0;
+    if (value > 2) {
+        solobosskillsInput.value = 2;
+    } else if (value < 0) {
+        solobosskillsInput.value = 0;
+    }
+    updateTotal();
+}
 
 function tdnn() {
 document.getElementsByClassName("moon")[0].classList.toggle("sun");
@@ -410,6 +470,10 @@ function updateTotal() {
     let bosskills = parseInt(document.getElementById("bosskills").value) || 0;
     totalXP += bosskills * 400 * multiplier;  // 400 XP per boss, multiplied by the multiplier
 
+    // Add XP for boss kills
+    let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;
+    totalXP += solobosskills * 800 * multiplier;  // 800 XP per boss, multiplied by the multiplier
+
     // Add XP for boss banishes
     let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
     totalXP += banishpickups * 350 * multiplier;  // 350 XP per banish, multiplied by the multiplier
@@ -432,6 +496,7 @@ function updateTotal() {
         <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
             <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 130px !important;" >
         </a>
+		<a href="soulsurvivor.html" style="background-color: black; color: white; padding: 5px;">Soul Survivor Calculator</a>
 	    <div onclick="tdnn()" class="tdnn">
 		<div class="moon">
 		</div>

@@ -232,7 +232,9 @@
 				&nbsp;Clues Found (200 XP)
 			</div>
 			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="lairpickups" placeholder="#" oninput="updateTotal(); validateLairInput();" min="0" max="4">
+				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Rifts Closed (100 XP) 
 			</div>
 			<div class="item" style="display: none;">
@@ -248,8 +250,8 @@
 				&nbsp;Boss Banishes (350 XP)
 			</div>
 
-            <div class="item"><input type="text" id="extractionTime" placeholder="#" oninput="updateTotal()" maxlength="3">&nbsp;Energy Absorbed (4 XP)</div>
-            <div class="item" style="display: none;"><input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2">&nbsp;XP Envelopes (500 XP)</div>
+            <div class="item"><button onclick="adjustCount(this, -1)">-</button><input type="number" id="extractionTime" placeholder="#" oninput="updateTotal()" min="1" max="450" maxlength="3"><button onclick="adjustCount(this, 1)">+</button>&nbsp;Energy Absorbed (4 XP)</div>
+            <div class="item" style="display: none;"><input type="number" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2">&nbsp;XP Envelopes (500 XP)</div>
         </div>
 
         <div class="section">
@@ -282,7 +284,9 @@
 
 function adjustCount(button, change) {
     let input = button.parentElement.querySelector("input");
-    let newValue = Math.max(0, parseInt(input.value) + change);
+    let min = parseInt(input.min) || 0;
+    let max = parseInt(input.max) || Infinity;
+    let newValue = Math.min(max, Math.max(min, parseInt(input.value) + change));
     input.value = newValue;
     updateTotal();
 }
@@ -387,6 +391,17 @@ function validatesoloBossInput() {
         solobosskillsInput.value = 2;
     } else if (value < 0) {
         solobosskillsInput.value = 0;
+    }
+    updateTotal();
+}
+
+function validateextractiontimeInput() {
+    let extractiontimeInput = document.getElementById("extractiontime");
+    let value = parseInt(extractiontimeInput.value) || 0;
+    if (value > 450) {
+        extractiontimeInput.value = 450;
+    } else if (value < 0) {
+        extractiontimeInput.value = 0;
     }
     updateTotal();
 }

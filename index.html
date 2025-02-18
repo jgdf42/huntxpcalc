@@ -9,6 +9,10 @@
         .section { margin-bottom: 20px; }
         .item { display: flex; align-items: center; margin-bottom: 10px; }
         .item input[type="number"] { width: 60px; text-align: center; font-size: 16px; }
+		.item input[type="text"] {
+			width: 70px;
+			box-sizing: border-box;
+		}
         .total { font-size: 14px; font-weight: bold; margin-top: 10px; }
         .progress-section { margin-left: 50px; }
         .toggleDarkMode {
@@ -108,7 +112,6 @@
 		.tdnn {
 		  cursor: pointer;
 		  margin: 0 auto;
-		  /*change size of toggle with font-size*/
 		  font-size: 30%;
 		  margin-top: 10em;
 		  position: relative;
@@ -158,7 +161,7 @@
     </style>
 </head>
 <body>
-
+<body onload="resetFields()">  
     <div>
 	
 
@@ -176,28 +179,35 @@
 			
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
-			<div class="item">
-				Clues Found (200 XP): 
-				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
-			</div>
-			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 1 Discovered (100 XP)</div>
-			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 2 Discovered (100 XP)</div>
-            <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 1 Kill (400 XP)</div>
-            <div class="item"><input type="checkbox" data-xp="400" onchange="updateTotal()"> Boss 2 Kill (400 XP)</div>
-            <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 1 Banish (350 XP)</div>
-            <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 2 Banish (350 XP)</div>
             <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
-<div class="item">
-    <input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
-    Solo VS Duo (600 XP)
-</div>
-<div class="item">
-    <input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
-    Solo VS Trio (2400 XP)
-</div>
+			<div class="item">
+				<input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
+				Solo VS Duo (600 XP)
+			</div>
+			<div class="item">
+				<input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
+				Solo VS Trio (2400 XP)
+			</div>
 
-            <div class="item">Extraction Time: <input type="text" id="extractionTime" placeholder="Minutes Left" oninput="updateTotal()" maxlength="2"></div>
-            <div class="item">XP Envelopes (500 XP): <input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2"></div>
+			<div class="item"> 
+				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
+				&nbsp;Clues Found (200 XP)
+			</div>
+			<div class="item">
+				<input type="number" id="lairpickups" placeholder="#" oninput="updateTotal(); validateLairInput();" min="0" max="2">
+				&nbsp;Lairs Discovered (100 XP) 
+			</div>
+			<div class="item">
+				<input type="number" id="bosskills" placeholder="#" oninput="updateTotal(); validateBossInput();" min="0" max="2">
+				&nbsp;Boss Kills (400 XP)
+			</div>
+			<div class="item">
+				<input type="number" id="banishpickups" placeholder="#" oninput="updateTotal(); validateBanishInput();" min="0" max="2">
+				&nbsp;Boss Banishes (350 XP)
+			</div>
+
+            <div class="item"><input type="text" id="extractionTime" placeholder="Minutes" oninput="updateTotal()" maxlength="2">&nbsp;Extraction Time</div>
+            <div class="item"><input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2">&nbsp;XP Envelopes (500 XP)</div>
         </div>
 
         <div class="section">
@@ -252,7 +262,17 @@ function updateTotal() {
 
     // Add XP for clue pickups
     let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
-    totalXP += cluepickups * 200 * multiplier;  // 200 XP per clue, multiplied by the multiplier
+    totalXP += cluepickups * 200 * multiplier;
+
+    // Add XP for lairs discovered
+    let lairpickups = parseInt(document.getElementById("lairpickups").value) || 0;
+    totalXP += lairpickups * 100 * multiplier;
+
+	let bosskills = parseInt(document.getElementById("bosskills").value) || 0;  // Get boss kills VALUE
+	totalXP += bosskills * 400 * multiplier;
+
+	let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0; // Get banishes VALUE
+	totalXP += banishpickups * 350 * multiplier;
 
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
     totalXP += extraction * 4 * multiplier;
@@ -281,6 +301,40 @@ function validateClueInput() {
     }
     updateTotal();
 }
+
+function validateLairInput() {
+    let lairpickupsInput = document.getElementById("lairpickups");
+    let value = parseInt(lairpickupsInput.value) || 0;
+    if (value > 2) {
+        lairpickupsInput.value = 2;
+    } else if (value < 0) {
+        lairpickupsInput.value = 0;
+    }
+    updateTotal();
+}
+
+function validateBanishInput() {
+    let banishpickupsInput = document.getElementById("banishpickups");
+    let value = parseInt(banishpickupsInput.value) || 0;
+    if (value > 2) {
+        banishpickupsInput.value = 2;
+    } else if (value < 0) {
+        banishpickupsInput.value = 0;
+    }
+    updateTotal();
+}
+
+function validateBossInput() {
+    let bosskillsInput = document.getElementById("bosskills");
+    let value = parseInt(bosskillsInput.value) || 0;
+    if (value > 2) {
+        bosskillsInput.value = 2;
+    } else if (value < 0) {
+        bosskillsInput.value = 0;
+    }
+    updateTotal();
+}
+
 
 
 function tdnn() {
@@ -348,6 +402,19 @@ function updateTotal() {
     let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
     totalXP += cluepickups * 200 * multiplier;  // 200 XP per clue, multiplied by the multiplier
 
+    // Add XP for lair discovery
+    let lairpickups = parseInt(document.getElementById("lairpickups").value) || 0;
+    totalXP += lairpickups * 100 * multiplier;  // 100 XP per clue, multiplied by the multiplier
+
+    // Add XP for boss kills
+    let bosskills = parseInt(document.getElementById("bosskills").value) || 0;
+    totalXP += bosskills * 400 * multiplier;  // 400 XP per boss, multiplied by the multiplier
+
+    // Add XP for boss banishes
+    let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
+    totalXP += banishpickups * 350 * multiplier;  // 350 XP per banish, multiplied by the multiplier
+
+
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
     totalXP += extraction * 4 * multiplier;
 
@@ -369,6 +436,5 @@ function updateTotal() {
 		<div class="moon">
 		</div>
 		</div>
-		<body onload="resetFields()">  
 </body>
 </html>

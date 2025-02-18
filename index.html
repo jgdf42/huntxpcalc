@@ -264,8 +264,8 @@
 				&nbsp;Boss Banishes (350 XP)
 			</div>
 
-            <div class="item"><input type="text" id="extractionTime" placeholder="Minutes" oninput="updateTotal()" maxlength="2">&nbsp;Extraction Time (16 XP per min left)</div>
-            <div class="item"><input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2">&nbsp;XP Envelopes (500 XP)</div>
+            <div class="item"><button onclick="adjustCount(this, -1)">-</button><input type="number" id="extractionTime" placeholder="Mins" oninput="updateTotal()" maxlength="2" min="0" max="44"><button onclick="adjustCount(this, 1)">+</button>&nbsp;Extraction Time (16 XP per min left)</div>
+            <div class="item"><button onclick="adjustCount(this, -1)">-</button><input type="number" id="envelopeXP" placeholder="#" oninput="updateTotal()" maxlength="2"><button onclick="adjustCount(this, 1)">+</button>&nbsp;XP Envelopes (500 XP)</div>
         </div>
 
         <div class="section">
@@ -408,6 +408,18 @@ function validatesoloBossInput() {
     }
     updateTotal();
 }
+
+function validateextractiontimeInput() {
+    let extractiontimeInput = document.getElementById("extractiontime");
+    let value = parseInt(extractiontimeInput.value) || 0;
+    if (value > 44) {
+        extractiontimeInput.value = 44;
+    } else if (value < 0) {
+        extractiontimeInput.value = 0;
+    }
+    updateTotal();
+}
+
 
 function tdnn() {
 document.getElementsByClassName("moon")[0].classList.toggle("sun");

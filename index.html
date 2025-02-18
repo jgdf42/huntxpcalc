@@ -158,6 +158,7 @@
     </style>
 </head>
 <body>
+
     <div>
 	
 
@@ -176,8 +177,8 @@
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
 			<div class="item">
-				Clues (200 XP): 
-				<input type="number" id="cluepickups" placeholder="# of Clues Found" oninput="updateTotal(); validateClueInput();" min="0" max="6">
+				Clues Found (200 XP): 
+				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
 			</div>
 			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 1 Discovered (100 XP)</div>
 			<div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Lair 2 Discovered (100 XP)</div>
@@ -186,6 +187,15 @@
             <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 1 Banish (350 XP)</div>
             <div class="item"><input type="checkbox" data-xp="350" onchange="updateTotal()"> Boss 2 Banish (350 XP)</div>
             <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
+<div class="item">
+    <input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
+    Solo VS Duo (600 XP)
+</div>
+<div class="item">
+    <input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
+    Solo VS Trio (2400 XP)
+</div>
+
             <div class="item">Extraction Time: <input type="text" id="extractionTime" placeholder="Minutes Left" oninput="updateTotal()" maxlength="2"></div>
             <div class="item">XP Envelopes (500 XP): <input type="text" id="envelopeXP" placeholder="" oninput="updateTotal()" maxlength="2"></div>
         </div>
@@ -198,6 +208,7 @@
 
 
     <script>
+
         const creatures = {
             "&nbsp;Leech": 10, "&nbsp;Grunt": 20, "&nbsp;Hellhound": 40, "&nbsp;Waterdevil": 20,
             "&nbsp;Hive": 60, "&nbsp;Immolator": 60, "&nbsp;Armoured": 60, "&nbsp;Meathead": 300,
@@ -305,10 +316,52 @@ function resetFields() {
     updateTotal();
 }
 
+function soloselection(currentCheckbox) {
+    const soloDuo = document.getElementById("soloDuo");
+    const soloTrio = document.getElementById("soloTrio");
+
+    if (currentCheckbox === soloDuo) {
+        soloTrio.checked = false;
+    } else if (currentCheckbox === soloTrio) {
+        soloDuo.checked = false;
+    }
+
+    updateTotal(); // Crucial: Recalculate total XP using updateTotal()
+}
+
+function updateTotal() {
+    let totalXP = 0;
+    let multiplier = 1;
+    if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
+    if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
+
+    document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
+        totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
+    });
+
+    document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
+        let xp = parseInt(input.value) * parseInt(input.getAttribute("data-xp")) || 0;
+        totalXP += xp * multiplier;
+    });
+
+    // Add XP for clue pickups
+    let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
+    totalXP += cluepickups * 200 * multiplier;  // 200 XP per clue, multiplied by the multiplier
+
+    let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
+    totalXP += extraction * 4 * multiplier;
+
+    let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
+    totalXP += envelope * 500;
+
+    document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
+    updateProgress();
+}
+
     </script>
 
     <div class="footer">
-        <p style="font-size: 12px; text-align: center;">Last updated 02/15/2025</p>
+        <p style="font-size: 12px; text-align: center;">Last updated 02/17/2025</p>
         <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
             <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 130px !important;" >
         </a>
@@ -316,5 +369,6 @@ function resetFields() {
 		<div class="moon">
 		</div>
 		</div>
+		<body onload="resetFields()">  
 </body>
 </html>

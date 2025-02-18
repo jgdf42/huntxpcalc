@@ -234,23 +234,33 @@
 			  </sup>
 			</div>
 			<div class="item"> 
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
+				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Clues Found (200 XP)
 			</div>
 			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="lairpickups" placeholder="#" oninput="updateTotal(); validateLairInput();" min="0" max="2">
+				<button onclick="adjustCount(this, 1)">+</button>				
 				&nbsp;Lairs Discovered (100 XP) 
 			</div>
 			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="bosskills" placeholder="#" oninput="updateTotal(); validateBossInput();" min="0" max="2">
+				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Boss Kills [Team Queue] (400 XP)
 			</div>
 			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="solobosskills" placeholder="#" oninput="updateTotal(); validatesoloBossInput();" min="0" max="2">
+				<button onclick="adjustCount(this, 1)">+</button>				
 				&nbsp;Boss Kills [Solo Queue] (800 XP)
 			</div>
 			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="banishpickups" placeholder="#" oninput="updateTotal(); validateBanishInput();" min="0" max="2">
+				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Boss Banishes (350 XP)
 			</div>
 
@@ -288,7 +298,9 @@
 
 function adjustCount(button, change) {
     let input = button.parentElement.querySelector("input");
-    let newValue = Math.max(0, parseInt(input.value) + change);
+    let min = parseInt(input.min) || 0;
+    let max = parseInt(input.max) || Infinity;
+    let newValue = Math.min(max, Math.max(min, parseInt(input.value) + change));
     input.value = newValue;
     updateTotal();
 }

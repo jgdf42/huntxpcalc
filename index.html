@@ -112,6 +112,7 @@
 		.tdnn {
 		  cursor: pointer;
 		  margin: 0 auto;
+		  /*change size of toggle with font-size*/
 		  font-size: 30%;
 		  margin-top: 10em;
 		  position: relative;
@@ -179,7 +180,6 @@
 			
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (10% Multiplier)</div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (15% Multiplier)</div>
-            <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
 			<div class="item">
 				<input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
 				Solo VS Duo (600 XP)
@@ -188,7 +188,7 @@
 				<input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
 				Solo VS Trio (2400 XP)
 			</div>
-
+            <div class="item"><input type="checkbox" data-xp="100" onchange="updateTotal()"> Clean Sweep (100 XP)</div>
 			<div class="item"> 
 				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
 				&nbsp;Clues Found (200 XP)
@@ -275,7 +275,7 @@ function updateTotal() {
 	totalXP += banishpickups * 350 * multiplier;
 
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
-    totalXP += extraction * 4 * multiplier;
+    totalXP += extraction * 16 * multiplier;
 
     let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
     totalXP += envelope * 500;
@@ -416,7 +416,7 @@ function updateTotal() {
 
 
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
-    totalXP += extraction * 4 * multiplier;
+    totalXP += extraction * 16 * multiplier;
 
     let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
     totalXP += envelope * 500;

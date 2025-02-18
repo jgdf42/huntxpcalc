@@ -301,9 +301,19 @@ function adjustCount(button, change) {
     let min = parseInt(input.min) || 0;
     let max = parseInt(input.max) || Infinity;
     let newValue = Math.min(max, Math.max(min, parseInt(input.value) + change));
+
     input.value = newValue;
+
+    // Enforce exclusivity between bosskills and solobosskills
+    if (input.id === "bosskills" && newValue > 0) {
+        document.getElementById("solobosskills").value = 0;
+    } else if (input.id === "solobosskills" && newValue > 0) {
+        document.getElementById("bosskills").value = 0;
+    }
+
     updateTotal();
 }
+
 
 function updateTotal() {
     let totalXP = 0;
@@ -389,25 +399,42 @@ function validateBanishInput() {
 
 function validateBossInput() {
     let bosskillsInput = document.getElementById("bosskills");
+    let solobosskillsInput = document.getElementById("solobosskills");
     let value = parseInt(bosskillsInput.value) || 0;
+
     if (value > 2) {
         bosskillsInput.value = 2;
     } else if (value < 0) {
         bosskillsInput.value = 0;
     }
+
+    // If bosskills is greater than 0, reset solobosskills
+    if (value > 0) {
+        solobosskillsInput.value = 0;
+    }
+
     updateTotal();
 }
 
 function validatesoloBossInput() {
+    let bosskillsInput = document.getElementById("bosskills");
     let solobosskillsInput = document.getElementById("solobosskills");
     let value = parseInt(solobosskillsInput.value) || 0;
+
     if (value > 2) {
         solobosskillsInput.value = 2;
     } else if (value < 0) {
         solobosskillsInput.value = 0;
     }
+
+    // If solobosskills is greater than 0, reset bosskills
+    if (value > 0) {
+        bosskillsInput.value = 0;
+    }
+
     updateTotal();
 }
+
 
 function validateextractiontimeInput() {
     let extractiontimeInput = document.getElementById("extractiontime");

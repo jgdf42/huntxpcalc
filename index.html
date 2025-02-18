@@ -254,6 +254,9 @@
 				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
 				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Clues Found (200 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(If first clue collected is Boss,<p>only count one clue as found<p>for that bounty.)</span>
+			  </sup>
 			</div>
 			<div class="item">
 				<button onclick="adjustCount(this, -1)">-</button>
@@ -272,6 +275,12 @@
 				<input type="number" id="solobosskills" placeholder="#" oninput="updateTotal(); validatesoloBossInput();" min="0" max="2">
 				<button onclick="adjustCount(this, 1)">+</button>				
 				&nbsp;Boss Kills [Solo Queue] (800 XP)
+			</div>
+			<div class="item">
+				<button onclick="adjustCount(this, -1)">-</button>
+				<input type="number" id="Tokenpickups" placeholder="#" oninput="updateTotal(); validateTokenInput();" min="0" max="4">
+				<button onclick="adjustCount(this, 1)">+</button>
+				&nbsp;Tokens Extracted (500 XP)
 			</div>
 			<div class="item">
 				<button onclick="adjustCount(this, -1)">-</button>
@@ -363,6 +372,9 @@ function updateTotal() {
 	let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0; // Get banishes VALUE
 	totalXP += banishpickups * 350 * multiplier;
 
+	let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0; // Get banishes VALUE
+	totalXP += Tokenpickups * 500 * multiplier;
+
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
     totalXP += extraction * 16 * multiplier;
 
@@ -409,6 +421,18 @@ function validateBanishInput() {
         banishpickupsInput.value = 2;
     } else if (value < 0) {
         banishpickupsInput.value = 0;
+    }
+    updateTotal();
+}
+
+
+function validateTokenInput() {
+    let TokenpickupsInput = document.getElementById("Tokenpickups");
+    let value = parseInt(TokenpickupsInput.value) || 0;
+    if (value > 4) {
+        TokenpickupsInput.value = 4;
+    } else if (value < 0) {
+        TokenpickupsInput.value = 0;
     }
     updateTotal();
 }
@@ -544,6 +568,10 @@ function updateTotal() {
     // Add XP for boss banishes
     let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
     totalXP += banishpickups * 350 * multiplier;  // 350 XP per banish, multiplied by the multiplier
+
+    // Add XP for token pickups
+    let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0;
+    totalXP += Tokenpickups * 500 * multiplier;  // 500 XP per token, multiplied by the multiplier
 
 
     let extraction = parseInt(document.getElementById("extractionTime").value) || 0;

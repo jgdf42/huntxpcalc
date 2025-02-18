@@ -213,8 +213,8 @@
 			  </sup></div>
             <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (+15%)</div>
 			<div class="item">
-				<input type="checkbox" data-xp="600" id="soloDuo" onchange="updateTotal(); soloselection(this)">
-				Solo VS Duo (600 XP)
+				<input type="checkbox" data-xp="1200" id="soloDuo" onchange="updateTotal(); soloselection(this)">
+				Solo VS Duo (1200 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
 			  </sup>
@@ -222,6 +222,13 @@
 			<div class="item">
 				<input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
 				Solo VS Trio (2400 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
+			  </sup>
+			</div>
+			<div class="item">
+				<input type="checkbox" data-xp="600" id="duoTrio" onchange="updateTotal(); soloselection(this)">
+				Duo VS Trio (600 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
 			  </sup>
@@ -482,17 +489,17 @@ function resetFields() {
 }
 
 function soloselection(currentCheckbox) {
-    const soloDuo = document.getElementById("soloDuo");
-    const soloTrio = document.getElementById("soloTrio");
+    const checkboxes = ["soloDuo", "soloTrio", "duoTrio"];
 
-    if (currentCheckbox === soloDuo) {
-        soloTrio.checked = false;
-    } else if (currentCheckbox === soloTrio) {
-        soloDuo.checked = false;
-    }
+    checkboxes.forEach(id => {
+        if (currentCheckbox.id !== id) {
+            document.getElementById(id).checked = false;
+        }
+    });
 
-    updateTotal(); // Crucial: Recalculate total XP using updateTotal()
+    updateTotal(); // Recalculate total XP after selection change
 }
+
 
 function updateTotal() {
     let totalXP = 0;

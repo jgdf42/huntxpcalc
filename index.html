@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XP Tracker</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: space-between; font-size: 14px; }
+        body { font-family: Arial, sans-serif; display: flex; justify-content: space-between; font-size: 12px; }
         .section { margin-bottom: 20px; }
         .item { display: flex; align-items: center; margin-bottom: 10px; }
-        .item input[type="number"] { width: 60px; text-align: center; font-size: 16px; }
+        .item input[type="number"] { width: 60px; text-align: center; font-size: 12px; }
 		.item input[type="text"] {
 			width: 70px;
 			box-sizing: border-box;
@@ -29,7 +29,25 @@
             font-size: 14px;
             margin-bottom: 10px;
         }
+		.item {
+			display: flex;
+			align-items: center; /* Vertically align items */
+			margin-bottom: 10px;
+			flex-wrap: wrap; /* Allow wrapping */
+			flex-shrink: 0; 
+		}
 
+		.item > * {
+			margin-right: 5px;
+		}
+
+		.item input[type="number"],
+		.item input[type="text"] {
+			width: 60px;
+			text-align: center;
+			font-size: 16px;
+			box-sizing: border-box;
+		}
         .switch {
             position: relative;
             display: inline-block;
@@ -371,47 +389,7 @@ function adjustCount(button, change) {
 }
 
 
-function updateTotal() {
-    let totalXP = 0;
-    let multiplier = 1;
-    if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
-    if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
 
-    document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
-        totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
-    });
-
-    document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
-        let xp = parseInt(input.value) * parseInt(input.getAttribute("data-xp")) || 0;
-        totalXP += xp * multiplier;
-    });
-
-    // Add XP for clue pickups
-    let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
-    totalXP += cluepickups * 200 * multiplier;
-
-    // Add XP for lairs discovered
-    let lairpickups = parseInt(document.getElementById("lairpickups").value) || 0;
-    totalXP += lairpickups * 100 * multiplier;
-
-	let bosskills = parseInt(document.getElementById("bosskills").value) || 0;  // Get boss kills VALUE
-	totalXP += bosskills * 400 * multiplier;
-
-	let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;  // Get solo boss kills VALUE
-	totalXP += solobosskills * 800 * multiplier;
-
-	let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0; // Get banishes VALUE
-	totalXP += banishpickups * 350 * multiplier;
-
-	let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0; // Get banishes VALUE
-	totalXP += Tokenpickups * 500 * multiplier;
-
-    let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
-    totalXP += envelope * 500;
-
-    document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
-    updateProgress();
-}
 
 function updateProgress() {
     let level = parseInt(document.getElementById("currentLevel").value) || 1;
@@ -618,7 +596,10 @@ function updateTotal() {
     let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0;
     totalXP += Tokenpickups * 500 * multiplier;  // 500 XP per token, multiplied by the multiplier
 
-
+    let envelopeXPInput = document.getElementById("envelopeXP");
+    let envelopeXP = parseInt(envelopeXPInput.value) || 0;
+    totalXP += envelopeXP * 500; // No multiplier here!
+	
     let extractionTimeInput = document.getElementById("extractionTime");
     let extractionTimeStr = extractionTimeInput.value;
     let extractionSeconds = 0;

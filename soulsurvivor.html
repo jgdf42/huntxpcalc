@@ -198,12 +198,14 @@
         <div class="progress-section">
             <h3>Soul Survivor Calculator</h3>
             <div class="item" style="display: none;">Current Level:&nbsp;<input type="number" id="currentLevel" min="1" max="1" value="1" oninput="updateProgress()"></div>
-        <div class="item">Estimated Current Level: <span id="estimatedLevel">1</span></div> <div class="item">XP to Next Level: <span id="xpToNextLevel">100</span></div>
-		<div class="item" style="display: none;">Estimated XP Remaining:&nbsp;<span id="xpRemaining">&nbsp;21100</span></div>
+        <div class="item">Estimated Current Level:&nbsp;<span id="estimatedLevel">1</span></div> <div class="item">XP to Next Level:&nbsp;<span id="xpToNextLevel">100</span></div>
+        <div class="item">Bonus Bloodline XP:&nbsp;<span id="bonusBloodlineXP">0</span></div>
+		<div class="item" style="display: none;">Estimated XP Remaining:&nbsp;<span id="xpRemaining">&nbsp;21100</span>
+		</div>
 			<button onclick="resetFields()">Reset</button>
         </div>
         
-        <div class="total"><br>Total XP: <span id="totalXP">0</span></div>
+        <div class="total"><br>Total XP:&nbsp;<span id="totalXP">0</span></div>
 
         <div class="section">
             <h3></h3>
@@ -359,6 +361,18 @@ function updateTotal() {
             document.getElementById("xpToNextLevel").textContent = neededXP;
 
             document.getElementById("xpRemaining").textContent = 21100 - totalXP; //Simplified
+
+            // Calculate bonus bloodline XP
+            let bonusXP = 0;
+            if (level >= 4) bonusXP += 250;
+            if (level >= 9) bonusXP += 250;
+            if (level >= 13) bonusXP += 250;
+            if (level >= 19) bonusXP += 500;
+            if (level >= 26) bonusXP += 500;
+            if (level >= 34) bonusXP += 500;
+            if (level >= 42) bonusXP += 750;
+            if (level >= 50) bonusXP += 1000;
+            document.getElementById("bonusBloodlineXP").textContent = bonusXP;
         }
 
 function validateClueInput() {
@@ -458,7 +472,7 @@ function resetFields() {
 
 	document.getElementById("estimatedLevel").textContent = 1;
 	document.getElementById("xpToNextLevel").textContent = 100;
-  
+    document.getElementById("bonusBloodlineXP").textContent = 0;
 
     // Call updateTotal to recalculate based on the reset values
     updateTotal();

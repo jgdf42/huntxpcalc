@@ -20,9 +20,11 @@
             color: #ffffff;
         }
         .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
+            max-width: 600px; /* Adjust as needed */
+            width: 95%; /* Occupy most of the screen width on mobile */
+            margin: 20px auto; /* Center the container */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            padding: 10px; /* Add some padding around the content */
         }
         .last-updated {
             font-size: 14px;
@@ -65,7 +67,27 @@
             transition: 0.4s;
             border-radius: 50%;
         }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+        }
 
+        .item > * { /* Target direct children of .item */
+            margin-right: 5px; /* Add spacing between elements */
+        }
+
+        .item input[type="number"], .item input[type="text"] {
+            width: 60px; /* Adjust as needed */
+            text-align: center;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .item input[type="text"] {
+            width: 100px; /* Adjust as needed */
+        }
         input:checked + .slider {
             background-color: #007bff;
         }

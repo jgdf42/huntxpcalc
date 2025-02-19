@@ -8,7 +8,7 @@
         body { font-family: Arial, sans-serif; display: flex; justify-content: space-between; font-size: 14px; }
         .section { margin-bottom: 20px; }
         .item { display: flex; align-items: center; margin-bottom: 10px; }
-        .item input[type="number"] { width: 20px; text-align: center; font-size: 16px; }
+        .item input[type="number"] { width: 60px; text-align: center; font-size: 16px; }
 		.item input[type="text"] {
 			width: 70px;
 			box-sizing: border-box;
@@ -20,9 +20,10 @@
             color: #ffffff;
         }
         .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
+            max-width: 600px; /* Adjust as needed */
+            width: 95%; /* Occupy most of the screen width on mobile */
+            margin: 20px auto; /* Center the container */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
         .last-updated {
             font-size: 14px;
@@ -73,18 +74,18 @@
         }
 
         .item > * { /* Target direct children of .item */
-            margin-right: 0px; /* Add spacing between elements */
+            margin-right: 5px; /* Add spacing between elements */
         }
 
         .item input[type="number"], .item input[type="text"] {
-            width: 50px; /* Adjust as needed */
+            width: 60px; /* Adjust as needed */
             text-align: center;
-            font-size: 14px;
+            font-size: 16px;
             box-sizing: border-box;
         }
 
         .item input[type="text"] {
-            width: 100px; /* Adjust as needed */
+            width: 120px; /* Adjust as needed */
         }
         input:checked + .slider {
             background-color: #007bff;
@@ -272,7 +273,7 @@
 				<span class="tooltip-content">(Kill, Banish and Extract)</span>
 			  </sup>
 			</div>
-            <div class="item"><input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)" style="width: 130px;">&nbsp;Extraction Time Remaining
+            <div class="item"><input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)" style="width: 70px;">&nbsp;Extraction Time Remaining
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">Match time remaining.<p>Example:<p>23:05</span>
 			  </sup></div>

@@ -196,9 +196,10 @@
 	
 
         <div class="progress-section">
-            <h3>Progress to 50</h3>
-            <div class="item">Current Level:&nbsp;<input type="number" id="currentLevel" min="1" max="1" value="1" oninput="updateProgress()"></div>
-            <div class="item">Estimated XP Remaining:&nbsp;<span id="xpRemaining">&nbsp;21100</span></div>
+            <h3>Soul Survivor Calculator</h3>
+            <div class="item" style="display: none;">Current Level:&nbsp;<input type="number" id="currentLevel" min="1" max="1" value="1" oninput="updateProgress()"></div>
+        <div class="item">Estimated Current Level: <span id="estimatedLevel">1</span></div> <div class="item">XP to Next Level: <span id="xpToNextLevel">100</span></div>
+		<div class="item" style="display: none;">Estimated XP Remaining:&nbsp;<span id="xpRemaining">&nbsp;21100</span></div>
 			<button onclick="resetFields()">Reset</button>
         </div>
         
@@ -333,12 +334,29 @@ function updateTotal() {
     updateProgress();
 }
 
-function updateProgress() {
-    let level = parseInt(document.getElementById("currentLevel").value) || 1;
-    const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
-    let neededXP = 21100 - (xpTable[level - 1] + parseInt(document.getElementById("totalXP").textContent));
-    document.getElementById("xpRemaining").textContent = Math.max(0, neededXP);
-}
+        function updateProgress() {
+            let totalXP = parseInt(document.getElementById("totalXP").textContent) || 0;
+            const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
+            let level = 1;
+            for (let i = 0; i < xpTable.length; i++) {
+                if (totalXP >= xpTable[i]) {
+                    level = i + 1;
+                } else {
+                    break;
+                }
+            }
+            document.getElementById("estimatedLevel").textContent = level;
+
+            let neededXP = 0;
+            if (level < xpTable.length) {
+              neededXP = xpTable[level] - totalXP;
+            } else {
+                neededXP = 0; // or some large number if you don't want to show 0 for max level
+            }
+            document.getElementById("xpToNextLevel").textContent = neededXP;
+
+            document.getElementById("xpRemaining").textContent = 21100 - totalXP; //Simplified
+        }
 
 function validateClueInput() {
     let cluepickupsInput = document.getElementById("cluepickups");
@@ -434,6 +452,10 @@ function resetFields() {
 
     // Reset the current level to 1
     document.getElementById("currentLevel").value = 1;
+
+	document.getElementById("estimatedLevel").textContent = 1;
+	document.getElementById("xpToNextLevel").textContent = 100;
+  
 
     // Call updateTotal to recalculate based on the reset values
     updateTotal();

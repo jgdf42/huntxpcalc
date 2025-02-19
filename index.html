@@ -217,29 +217,32 @@
             <h3></h3>
 			
             <div class="item"><input type="checkbox" id="prestigeBoost" onchange="updateTotal()"> Prestige XP Boost (+10%)
-						  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">(Does Not Affect XP Envelopes)</span>
 			  </sup></div>
-            <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (+15%)</div>
+            <div class="item"><input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()"> First Daily Extract (+15%)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">(Works once per Hunter<p>per day.)</span>
+			  </sup></div>
 			<div class="item">
 				<input type="checkbox" data-xp="1200" id="soloDuo" onchange="updateTotal(); soloselection(this)">
 				Solo VS Duo (1200 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
-				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
+				<span class="tooltip-content">Bonus<p>Applies only on<p>extract with bounty</span>
 			  </sup>
 			</div>
 			<div class="item">
 				<input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this)">
 				Solo VS Trio (2400 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
-				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
+				<span class="tooltip-content">Bonus<p>Applies only on<p>extract with bounty</span>
 			  </sup>
 			</div>
 			<div class="item">
 				<input type="checkbox" data-xp="600" id="duoTrio" onchange="updateTotal(); soloselection(this)">
 				Duo VS Trio (600 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
-				<span class="tooltip-content">(Applies only if extracting with bounty)</span>
+				<span class="tooltip-content">Bonus<p>Applies only on<p>extract with bounty<p>Accolades:<p>Contract Status (425BP)</span>
 			  </sup>
 			</div>
 			<div class="item">
@@ -268,13 +271,18 @@
 				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="bosskills" placeholder="#" oninput="updateTotal(); validateBossInput();" min="0" max="2">
 				<button onclick="adjustCount(this, 1)">+</button>
-				&nbsp;Boss Kills [Team Queue] (400 XP)
+				&nbsp;Boss Kills [Team Queue] (400 XP)			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">Accolades:<p>Killed (100BP)</span>
+			  </sup>
 			</div>
 			<div class="item">
 				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="solobosskills" placeholder="#" oninput="updateTotal(); validatesoloBossInput();" min="0" max="2">
 				<button onclick="adjustCount(this, 1)">+</button>				
 				&nbsp;Boss Kills [Solo Queue] (800 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">Accolades:<p>Solo Kill Bonus (100BP)<p>Killed (100BP)</span>
+			  </sup>
 			</div>
 			<div class="item">
 				<button onclick="adjustCount(this, -1)">-</button>

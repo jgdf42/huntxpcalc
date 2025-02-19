@@ -252,6 +252,10 @@
 				<span class="tooltip-content">(Kill, Banish and Extract)</span>
 			  </sup>
 			</div>
+            <div class="item"><input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)" style="width: 130px;">&nbsp;Extraction Time Remaining
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">Match time remaining.<p>Example:<p>23:05</span>
+			  </sup></div>
 			<div class="item"> 
 				<button onclick="adjustCount(this, -1)">-</button>
 				<input type="number" id="cluepickups" placeholder="#" oninput="updateTotal(); validateClueInput();" min="0" max="6">
@@ -296,10 +300,8 @@
 				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Boss Banishes (350 XP)
 			</div>
-
-            <div class="item"><button onclick="adjustCount(this, -1)">-</button><input type="number" id="extractionTime" placeholder="Mins" oninput="updateTotal()" maxlength="2" min="0" max="44"><button onclick="adjustCount(this, 1)">+</button>&nbsp;Extraction Time (16 XP per min left)</div>
             <div class="item"><button onclick="adjustCount(this, -1)">-</button><input type="number" id="envelopeXP" placeholder="#" oninput="updateTotal()" maxlength="2"><button onclick="adjustCount(this, 1)">+</button>&nbsp;XP Envelopes (500 XP)</div>
-        </div>
+			</div>
 
         <div class="section">
             <h3></h3>
@@ -382,9 +384,6 @@ function updateTotal() {
 
 	let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0; // Get banishes VALUE
 	totalXP += Tokenpickups * 500 * multiplier;
-
-    let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
-    totalXP += extraction * 16 * multiplier;
 
     let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
     totalXP += envelope * 500;
@@ -483,18 +482,35 @@ function validatesoloBossInput() {
     updateTotal();
 }
 
+function validateExtractionTime(input) {
+    const currentValue = input.value;
+    const sanitizedValue = currentValue.replace(/[^0-9:]/g, ''); // Remove invalid chars
 
-function validateextractiontimeInput() {
-    let extractiontimeInput = document.getElementById("extractiontime");
-    let value = parseInt(extractiontimeInput.value) || 0;
-    if (value > 44) {
-        extractiontimeInput.value = 44;
-    } else if (value < 0) {
-        extractiontimeInput.value = 0;
+    input.value = sanitizedValue; // Update the input field
+
+    // Check if the input is now in a valid partial format (e.g., "1", "12", "12:", "12:3")
+    const isValidPartial = /^([0-5]?[0-9]:?)?([0-5]?[0-9])?$/.test(sanitizedValue);
+
+    if (!isValidPartial) {
+        // If it's not a valid partial format, revert to the last valid input (or empty string)
+        input.value = input.dataset.previousValidValue || "";
+    } else {
+        // Store the current (valid or partially valid) value
+        input.dataset.previousValidValue = sanitizedValue;
     }
-    updateTotal();
+
+    debouncedUpdateTotal();
 }
 
+
+let updateTotalTimeout; // For debouncing
+
+function debouncedUpdateTotal() {
+    clearTimeout(updateTotalTimeout); // Clear any pending timeouts
+    updateTotalTimeout = setTimeout(updateTotal, 200); // Call updateTotal after 200ms
+}
+
+document.getElementById("extractionTime").addEventListener("change", updateTotal); // Use 'change' event
 
 function tdnn() {
 document.getElementsByClassName("moon")[0].classList.toggle("sun");
@@ -582,15 +598,35 @@ function updateTotal() {
     totalXP += Tokenpickups * 500 * multiplier;  // 500 XP per token, multiplied by the multiplier
 
 
-    let extraction = parseInt(document.getElementById("extractionTime").value) || 0;
-    totalXP += extraction * 16 * multiplier;
+    let extractionTimeInput = document.getElementById("extractionTime");
+    let extractionTimeStr = extractionTimeInput.value;
+    let extractionSeconds = 0;
 
-    let envelope = parseInt(document.getElementById("envelopeXP").value) || 0;
-    totalXP += envelope * 500;
+    if (extractionTimeStr) {
+        let parts = extractionTimeStr.split(':');
+        if (parts.length === 2) {
+            let minutes = parseInt(parts[0]) || 0;
+            let seconds = parseInt(parts[1]) || 0;
+            extractionSeconds = minutes * 60 + seconds;
+        } else if (parts.length === 1) { // Handle cases where only minutes or seconds are entered
+            let minutes = parseInt(parts[0]) || 0;
+            extractionSeconds = minutes * 60; // Assume minutes if no colon
+        } else {
+            // Handle invalid format if needed (e.g., display a message)
+            extractionTimeInput.value = ""; // Or keep the invalid input
+        }
+    }
+
+    let extractionXP = 0;
+    if (extractionSeconds > 0) {
+        extractionXP = (extractionSeconds / 15) * 4;
+    }
+    totalXP += extractionXP * multiplier;
 
     document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
     updateProgress();
 }
+
 
     </script>
 

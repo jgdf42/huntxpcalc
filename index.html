@@ -290,6 +290,9 @@
 			</div>
         <div class="item">
             <input type="checkbox" id="deathPenalty" onchange="handleDeathPenalty()"> Death (½ XP to Bloodline)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">Bonus Bloodline XP awarded for Level milestones<br>during the match are still awarded on death,<br>unaffected by death penalty.</span>
+			  </sup>
         </div>
             <div class="item"><input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)" style="width: 70px;">&nbsp;Extraction Time Remaining
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
@@ -345,6 +348,9 @@
 				<input type="number" id="bloodlineEnvelopeXP" placeholder="#" oninput="updateTotal()" maxlength="2">
 				<button onclick="adjustCount(this, 1)">+</button>
 				&nbsp;Bloodline XP Envelopes (500 XP)
+			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
+				<span class="tooltip-content">Envelopes are unaffected by<br>death penalty XP reduction.</span>
+			  </sup>
 			</div>
 			</div>
 		
@@ -383,19 +389,20 @@
 // Function to update Bloodline XP and XP to Rank 100
 function updateBloodlineRankAndXP() {
     let rank = parseInt(document.getElementById("bloodlineRank").value) || 1;
-    rank = Math.max(1, Math.min(100, rank)); // Keep within valid range
-    document.getElementById("bloodlineRank").value = rank; 
+    rank = Math.max(1, Math.min(100, rank));
+    document.getElementById("bloodlineRank").value = rank; // Update the input field
 
-    let bloodlineXP = bloodlineXPTable[rank - 1] || 0;
+    let bloodlineXP = bloodlineXPTable[rank - 1];
     document.getElementById("estimatedBloodlineXP").textContent = bloodlineXP;
 
     let xpToRank100 = 99800 - bloodlineXP;
     document.getElementById("xpToRank100").textContent = Math.max(0, xpToRank100);
+
+    updateTotal(); // Recalculate total XP after bloodline rank changes
 }
 
 // Call updateBloodlineRankAndXP() at the appropriate places, for example:
-document.getElementById("bloodlineRank").addEventListener("input", updateBloodlineRankAndXP); // When rank input changes
-
+document.getElementById("bloodlineRank").addEventListener("input", updateBloodlineRankAndXP);
 		
 function adjustCount(button, change) {
     let input = button.parentElement.querySelector("input");
@@ -589,7 +596,8 @@ function resetFields() {
 
     // Reset Bloodline Rank FIRST before calculations
     document.getElementById("bloodlineRank").value = 1;  
-
+	document.getElementById("bonusBloodlineXP").textContent = '0';
+    updateBloodlineRankAndXP(); // Call updateBloodlineRankAndXP() *after* resetting rank
     // Reset XP-related values explicitly
     document.getElementById("estimatedBloodlineXP").textContent = '0';
     document.getElementById("xpToRank100").textContent = '99800';
@@ -784,6 +792,7 @@ function updateTotal() {
     document.getElementById("bonusBloodlineXP").textContent = bonusXP;
     document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
     updateProgress(totalXP);
+
 }
 
 function updateProgress(totalXP) {

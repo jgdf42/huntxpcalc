@@ -279,12 +279,15 @@
 			  </sup>
 			</div>
 			<div class="item">
-			  <input type="checkbox" data-xp="100" onchange="updateTotal()">
+			  <input type="checkbox" data-xp="100" id="cleanSweep" onchange="updateTotal()">
 			  Clean Sweep (100 XP)
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">Kill, Banish and Extract</span>
 			  </sup>
 			</div>
+        <div class="item">
+            <input type="checkbox" id="deathPenalty" onchange="handleDeathPenalty()"> Death (½ XP to Bloodline)
+        </div>
             <div class="item"><input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)" style="width: 70px;">&nbsp;Extraction Time Remaining
 			  <sup class="tooltip-trigger">&nbsp;&nbsp;⁽︖ ⁾
 				<span class="tooltip-content">Match time remaining.<p>Example:<p>23:05</span>
@@ -575,6 +578,15 @@ function resetFields() {
 	document.getElementById("xpToNextLevel").textContent = 100;
     document.getElementById("bonusBloodlineXP").textContent = 0;
 
+            // Re-enable all elements (important for resetting after death penalty)
+            const otherCheckboxes = [
+                "dailyExtractBoost", "soloDuo", "soloTrio", "duoTrio", "cleanSweep", "extractionTime", "Tokenpickups"
+            ];
+            enableElements(otherCheckboxes);
+            document.getElementById("deathPenalty").checked = false; // Uncheck death penalty as well
+
+            updateTotal(); // Recalculate after reset
+			
     // Call updateTotal to recalculate based on the reset values
     updateTotal();
 }
@@ -592,9 +604,60 @@ function soloselection(currentCheckbox) {
     updateTotal(); // Recalculate total XP after selection change
 }
 
+        function handleDeathPenalty() {
+            const deathPenaltyCheckbox = document.getElementById("deathPenalty");
+            const otherCheckboxes = [
+                "dailyExtractBoost", "soloDuo", "soloTrio", "duoTrio", "cleanSweep", "extractionTime", "Tokenpickups"
+            ];
 
+            if (deathPenaltyCheckbox.checked) {
+                disableElements(otherCheckboxes);
+            } else {
+                enableElements(otherCheckboxes);
+            }
+
+            updateTotal();
+        }
+
+        function disableElements(elements) {
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (element.type === "checkbox") {
+                        element.checked = false;
+                    } else if (element.type === "text" || element.type === "number") {
+                        element.value = 0;
+                        disableButtons(element);
+                    }
+                    element.disabled = true;
+                }
+            });
+        }
+
+        function enableElements(elements) {
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = false;
+                    if (element.type === "number") {
+                        enableButtons(element);
+                    }
+                }
+            });
+        }
+
+        function disableButtons(element) {
+            const buttons = element.parentElement.querySelectorAll("button");
+            buttons.forEach(button => button.disabled = true);
+        }
+
+        function enableButtons(element) {
+            const buttons = element.parentElement.querySelectorAll("button");
+            buttons.forEach(button => button.disabled = false);
+        }
+		
+		
 function updateTotal() {
-
     let totalXP = 0;
     let multiplier = 1;
     if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
@@ -609,34 +672,28 @@ function updateTotal() {
         totalXP += xp * multiplier;
     });
 
-    // Add XP for clue pickups
     let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
-    totalXP += cluepickups * 200 * multiplier;  // 200 XP per clue, multiplied by the multiplier
+    totalXP += cluepickups * 200 * multiplier;
 
-    // Add XP for lair discovery
     let lairpickups = parseInt(document.getElementById("lairpickups").value) || 0;
-    totalXP += lairpickups * 100 * multiplier;  // 100 XP per clue, multiplied by the multiplier
+    totalXP += lairpickups * 100 * multiplier;
 
-    // Add XP for boss kills
     let bosskills = parseInt(document.getElementById("bosskills").value) || 0;
-    totalXP += bosskills * 400 * multiplier;  // 400 XP per boss, multiplied by the multiplier
+    totalXP += bosskills * 400 * multiplier;
 
-    // Add XP for boss kills
     let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;
-    totalXP += solobosskills * 800 * multiplier;  // 800 XP per boss, multiplied by the multiplier
+    totalXP += solobosskills * 800 * multiplier;
 
-    // Add XP for boss banishes
     let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
-    totalXP += banishpickups * 350 * multiplier;  // 350 XP per banish, multiplied by the multiplier
+    totalXP += banishpickups * 350 * multiplier;
 
-    // Add XP for token pickups
     let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0;
-    totalXP += Tokenpickups * 500 * multiplier;  // 500 XP per token, multiplied by the multiplier
+    totalXP += Tokenpickups * 500 * multiplier;
 
     let envelopeXPInput = document.getElementById("envelopeXP");
     let envelopeXP = parseInt(envelopeXPInput.value) || 0;
-    totalXP += envelopeXP * 1000; // No multiplier here!
-	
+    totalXP += envelopeXP * 1000;
+
     let extractionTimeInput = document.getElementById("extractionTime");
     let extractionTimeStr = extractionTimeInput.value;
     let extractionSeconds = 0;
@@ -647,12 +704,11 @@ function updateTotal() {
             let minutes = parseInt(parts[0]) || 0;
             let seconds = parseInt(parts[1]) || 0;
             extractionSeconds = minutes * 60 + seconds;
-        } else if (parts.length === 1) { // Handle cases where only minutes or seconds are entered
+        } else if (parts.length === 1) {
             let minutes = parseInt(parts[0]) || 0;
-            extractionSeconds = minutes * 60; // Assume minutes if no colon
+            extractionSeconds = minutes * 60;
         } else {
-            // Handle invalid format if needed (e.g., display a message)
-            extractionTimeInput.value = ""; // Or keep the invalid input
+            extractionTimeInput.value = "";
         }
     }
 
@@ -662,10 +718,63 @@ function updateTotal() {
     }
     totalXP += extractionXP * multiplier;
 
+
+    let bonusXP = 0;
+    let deathPenaltyApplied = false;
+    let bloodlineEnvelopeMultiplier = 1;
+
+    if (document.getElementById("deathPenalty").checked) {
+        bonusXP = totalXP / 2;
+        totalXP -= bonusXP;
+        deathPenaltyApplied = true;
+        bloodlineEnvelopeMultiplier = 0.5;
+    }
+
+    let level = parseInt(document.getElementById("estimatedLevel").textContent) || 1;
+    if (!deathPenaltyApplied) {
+        if (level >= 4) bonusXP += 250;
+        if (level >= 9) bonusXP += 250;
+        if (level >= 13) bonusXP += 250;
+        if (level >= 19) bonusXP += 500;
+        if (level >= 26) bonusXP += 500;
+        if (level >= 34) bonusXP += 500;
+        if (level >= 42) bonusXP += 750;
+        if (level >= 50) bonusXP += 1000;
+    }
+
+    let bloodlineEnvelopeXPInput = document.getElementById("bloodlineEnvelopeXP");
+    let bonusBloodlineXPFromEnvelopes = (parseInt(bloodlineEnvelopeXPInput.value) || 0) * 500 * bloodlineEnvelopeMultiplier;
+
+    bonusXP += bonusBloodlineXPFromEnvelopes;
+    bonusXP = Math.max(0, bonusXP); // Keep bonusXP at 0 or above
+
+    document.getElementById("bonusBloodlineXP").textContent = bonusXP;
     document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
-    updateProgress();
+    updateProgress(totalXP);
 }
 
+function updateProgress(totalXP) {
+    const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
+    let level = 1;
+    for (let i = 0; i < xpTable.length; i++) {
+        if (totalXP >= xpTable[i]) {
+            level = i + 1;
+        } else {
+            break;
+        }
+    }
+    document.getElementById("estimatedLevel").textContent = level;
+
+    let neededXP = 0;
+    if (level < xpTable.length) {
+        neededXP = xpTable[level] - totalXP;
+    } else {
+        neededXP = 0;
+    }
+    document.getElementById("xpToNextLevel").textContent = neededXP;
+
+    document.getElementById("xpRemaining").textContent = 21100 - totalXP;
+}
 
     </script>
 

@@ -237,9 +237,12 @@
 
         <div class="progress-section">
             <h3>Bounty Hunt Calculator</h3>
+			<div class="item"><u>Bloodline Rank:</u><input type="number" id="bloodlineRank" value="1" min="1" max="100" oninput="updateBloodlineXP()"></span></div>
+			<div class="item"><u>Estimated Bloodline XP:</u>&nbsp;<span id="estimatedBloodlineXP">0</span></div>
+	        <div class="item"><u>XP To Bloodline Rank 100:</u>&nbsp;<span id="xpToRank100">0</span></div>
+			<div class="item"><u>Bonus Bloodline XP:</u>&nbsp;<span id="bonusBloodlineXP">0</span></div>
 			<div class="item"><u>Estimated Current Level:</u>&nbsp;<span id="estimatedLevel">1</span></div> 
 			<div class="item"><u>XP to Next Level:</u>&nbsp;<span id="xpToNextLevel">100</span></div>
-			<div class="item"><u>Bonus Bloodline XP:</u>&nbsp;<span id="bonusBloodlineXP">0</span></div>
             <div class="item"><u>XP to Level 50:</u>&nbsp;<span id="xpRemaining">&nbsp;21100</span></div>
 			<button onclick="resetFields()">Reset</button>
         </div>
@@ -354,6 +357,10 @@
 
     <script>
 
+		const bloodlineXPTable = [ // Array for quick lookup
+            0, 250, 750, 1300, 1800, 2300, 2800, 3300, 3800, 4300, 4800, 5300, 5800, 6300, 6800, 7300, 7800, 8300, 8800, 9300, 9800, 10300, 10800, 11300, 11800, 12300, 12800, 13300, 13800, 14300, 14800, 15300, 15800, 16800, 17800, 18800, 19800, 20800, 21800, 22800, 23800, 24800, 25800, 26800, 27800, 28800, 29800, 30800, 31800, 32800, 33800, 34800, 35800, 36800, 37800, 38800, 39800, 40800, 41800, 42800, 43800, 44800, 45800, 46800, 47800, 48800, 50300, 51800, 53300, 54800, 56300, 57800, 59300, 60800, 62300, 63800, 65300, 66800, 68300, 69800, 71300, 72800, 74300, 75800, 77300, 78800, 80300, 81800, 83300, 84800, 86300, 87800, 89300, 90800, 92300, 93800, 95300, 96800, 98300, 99800, 99800 // Up to rank 100
+        ];
+
         const creatures = {
             "&nbsp;Leech": 10, "&nbsp;Grunt": 20, "&nbsp;Hellhound": 40, "&nbsp;Waterdevil": 20,
             "&nbsp;Hive": 60, "&nbsp;Immolator": 60, "&nbsp;Armoured": 60, "&nbsp;Meathead": 300,
@@ -373,6 +380,23 @@
             creatureContainer.appendChild(div);
         }
 
+// Function to update Bloodline XP and XP to Rank 100
+function updateBloodlineRankAndXP() {
+    let rank = parseInt(document.getElementById("bloodlineRank").value) || 1;
+    rank = Math.max(1, Math.min(100, rank)); // Keep within valid range
+    document.getElementById("bloodlineRank").value = rank; 
+
+    let bloodlineXP = bloodlineXPTable[rank - 1] || 0;
+    document.getElementById("estimatedBloodlineXP").textContent = bloodlineXP;
+
+    let xpToRank100 = 99800 - bloodlineXP;
+    document.getElementById("xpToRank100").textContent = Math.max(0, xpToRank100);
+}
+
+// Call updateBloodlineRankAndXP() at the appropriate places, for example:
+document.getElementById("bloodlineRank").addEventListener("input", updateBloodlineRankAndXP); // When rank input changes
+
+		
 function adjustCount(button, change) {
     let input = button.parentElement.querySelector("input");
     let min = parseInt(input.min) || 0;
@@ -554,42 +578,51 @@ document.getElementsByClassName("tdnn")[0].classList.toggle("day");
 document.getElementsByTagName("BODY")[0].classList.toggle("light");
 }
 
+// Function to reset fields and ensure correct initial values
 function resetFields() {
-    // Reset the number inputs to 0
-    document.querySelectorAll("input[type='number']").forEach(input => {
-        input.value = 0;
-    });
-
-    // Reset the text inputs to blank
-    document.querySelectorAll("input[type='text']").forEach(input => {
-        input.value = '';
-    });
-
+    // Reset all number inputs
+    document.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
+    // Reset all text inputs
+    document.querySelectorAll("input[type='text']").forEach(input => input.value = '');
     // Uncheck all checkboxes
-    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
-        checkbox.checked = false;
-    });
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
 
-    // Reset total XP and XP remaining
+    // Reset Bloodline Rank FIRST before calculations
+    document.getElementById("bloodlineRank").value = 1;  
+
+    // Reset XP-related values explicitly
+    document.getElementById("estimatedBloodlineXP").textContent = '0';
+    document.getElementById("xpToRank100").textContent = '99800';
+
+    // Update based on new values
+    updateBloodlineRankAndXP(); 
+
+    // Reset other XP-related values
     document.getElementById("totalXP").textContent = '0';
     document.getElementById("xpRemaining").textContent = '21100';
-
-	document.getElementById("estimatedLevel").textContent = 1;
-	document.getElementById("xpToNextLevel").textContent = 100;
+    document.getElementById("estimatedLevel").textContent = 1;
+    document.getElementById("xpToNextLevel").textContent = 100;
     document.getElementById("bonusBloodlineXP").textContent = 0;
+    document.getElementById("envelopeXP").value = 0;
+    document.getElementById("bloodlineEnvelopeXP").value = 0;
 
-            // Re-enable all elements (important for resetting after death penalty)
-            const otherCheckboxes = [
-                "dailyExtractBoost", "soloDuo", "soloTrio", "duoTrio", "cleanSweep", "extractionTime", "Tokenpickups"
-            ];
-            enableElements(otherCheckboxes);
-            document.getElementById("deathPenalty").checked = false; // Uncheck death penalty as well
+    // Re-enable elements disabled by death penalty (if applicable)
+    const otherCheckboxes = [
+        "dailyExtractBoost", "soloDuo", "soloTrio", "duoTrio", "cleanSweep", "extractionTime", "Tokenpickups"
+    ];
+    enableElements(otherCheckboxes);
+    document.getElementById("deathPenalty").checked = false;
 
-            updateTotal(); // Recalculate after reset
-			
-    // Call updateTotal to recalculate based on the reset values
-    updateTotal();
+    // Reset creature counts
+    document.querySelectorAll("#creatures input[type='number']").forEach(input => input.value = 0);
+
+    updateTotal(); // Recalculate XP after reset
 }
+
+// Ensure the values reset correctly on page load
+document.addEventListener('DOMContentLoaded', function() {
+    resetFields();
+});
 
 
 function soloselection(currentCheckbox) {
@@ -779,7 +812,7 @@ function updateProgress(totalXP) {
     </script>
 
     <div class="footer">
-        <p style="font-size: 12px; text-align: center;">Last updated 02/19/2025</p>
+        <p style="font-size: 12px; text-align: center;">Last updated 02/20/2025</p>
         <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
             <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 130px !important;" >
         </a>

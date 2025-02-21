@@ -701,49 +701,35 @@ function soloselection(currentCheckbox) {
 function updateTotal() {
     let totalXP = 0;
     let multiplier = 1;
-    let bonusBloodlineXP = 0;
-
-    // Calculate Multiplier FIRST
     if (document.getElementById("prestigeBoost").checked) multiplier += 0.1;
     if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
 
-    // First To Die (Handle FIRST)
-    let firstToDieChecked = document.getElementById("firstToDie").checked;
-    if (firstToDieChecked) {
-        document.getElementById("deathPenalty").checked = true; // Auto-check Death
-        bonusBloodlineXP += 50 * multiplier; // Apply prestige bonus
-    }
-
-    // Death Penalty
-    let deathPenaltyChecked = document.getElementById("deathPenalty").checked;
-
-    // Calculate base XP (without multiplier yet)
     document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
-        totalXP += parseInt(cb.getAttribute("data-xp"));
+        totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
     });
 
     document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
         let xp = parseInt(input.value) * parseInt(input.getAttribute("data-xp")) || 0;
-        totalXP += xp;
+        totalXP += xp * multiplier;
     });
 
     let cluepickups = parseInt(document.getElementById("cluepickups").value) || 0;
-    totalXP += cluepickups * 200;
+    totalXP += cluepickups * 200 * multiplier;
 
     let lairpickups = parseInt(document.getElementById("lairpickups").value) || 0;
-    totalXP += lairpickups * 100;
+    totalXP += lairpickups * 100 * multiplier;
 
     let bosskills = parseInt(document.getElementById("bosskills").value) || 0;
-    totalXP += bosskills * 400;
+    totalXP += bosskills * 400 * multiplier;
 
     let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;
-    totalXP += solobosskills * 800;
+    totalXP += solobosskills * 800 * multiplier;
 
     let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
-    totalXP += banishpickups * 350;
+    totalXP += banishpickups * 350 * multiplier;
 
     let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0;
-    totalXP += Tokenpickups * 500;
+    totalXP += Tokenpickups * 500 * multiplier;
 
     let envelopeXPInput = document.getElementById("envelopeXP");
     let envelopeXP = parseInt(envelopeXPInput.value) || 0;
@@ -763,7 +749,7 @@ function updateTotal() {
             let minutes = parseInt(parts[0]) || 0;
             extractionSeconds = minutes * 60;
         } else {
-            extractionTimeInput.value = ""; // Clear invalid input
+            extractionTimeInput.value = "";
         }
     }
 
@@ -771,40 +757,44 @@ function updateTotal() {
     if (extractionSeconds > 0) {
         extractionXP = (extractionSeconds / 15) * 4;
     }
-    totalXP += extractionXP;
-
-    // Apply Multiplier to the ENTIRE totalXP *AFTER* all base XP is calculated
-    totalXP *= multiplier;
+    totalXP += extractionXP * multiplier;
 
 
-    // Death Penalty Logic (Apply AFTER multiplier)
-    if (deathPenaltyChecked) {
-        bonusBloodlineXP += totalXP / 2;
-        totalXP /= 2;
+    let bonusXP = 0;
+    let deathPenaltyApplied = false;
+    let bloodlineEnvelopeMultiplier = 1;
+
+    if (document.getElementById("deathPenalty").checked) {
+        bonusXP = totalXP / 2;
+        totalXP -= bonusXP;
+        deathPenaltyApplied = true;
+        bloodlineEnvelopeMultiplier = 0.5;
     }
 
-    // Level Bonus XP (Apply AFTER death penalty)
     let level = parseInt(document.getElementById("estimatedLevel").textContent) || 1;
-    if (!deathPenaltyChecked) { // Only apply if death penalty is NOT checked
-        if (level >= 4) bonusBloodlineXP += 250;
-        if (level >= 9) bonusBloodlineXP += 250;
-        if (level >= 13) bonusBloodlineXP += 250;
-        if (level >= 19) bonusBloodlineXP += 500;
-        if (level >= 26) bonusBloodlineXP += 500;
-        if (level >= 34) bonusBloodlineXP += 500;
-        if (level >= 42) bonusBloodlineXP += 750;
-        if (level >= 50) bonusBloodlineXP += 1000;
+    if (!deathPenaltyApplied) {
+        if (level >= 4) bonusXP += 250;
+        if (level >= 9) bonusXP += 250;
+        if (level >= 13) bonusXP += 250;
+        if (level >= 19) bonusXP += 500;
+        if (level >= 26) bonusXP += 500;
+        if (level >= 34) bonusXP += 500;
+        if (level >= 42) bonusXP += 750;
+        if (level >= 50) bonusXP += 1000;
     }
 
     let bloodlineEnvelopeXPInput = document.getElementById("bloodlineEnvelopeXP");
-    let bonusBloodlineXPFromEnvelopes = (parseInt(bloodlineEnvelopeXPInput.value) || 0) * 500; // No multiplier
-    bonusBloodlineXP += bonusBloodlineXPFromEnvelopes;
-    bonusBloodlineXP = Math.max(0, bonusBloodlineXP);
+    let bonusBloodlineXPFromEnvelopes = (parseInt(bloodlineEnvelopeXPInput.value) || 0) * 500 * bloodlineEnvelopeMultiplier;
 
-    document.getElementById("bonusBloodlineXP").textContent = bonusBloodlineXP;
+    bonusXP += bonusBloodlineXPFromEnvelopes;
+    bonusXP = Math.max(0, bonusXP); // Keep bonusXP at 0 or above
+
+    document.getElementById("bonusBloodlineXP").textContent = bonusXP;
     document.getElementById("totalXP").textContent = Math.max(0, Math.round(totalXP));
     updateProgress(totalXP);
+
 }
+
 function updateProgress(totalXP) {
     const xpTable = [0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100, 5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600, 10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100, 15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100];
     let level = 1;

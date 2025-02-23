@@ -1,5 +1,3 @@
----
-
 ## Frequently Asked Questions
 
 **Q: What is this?**  
@@ -29,4 +27,3 @@ If you'd like to support my work or if this helped you, consider buying me a cof
 
 Thanks a bunch, see you on the bayou!
 
---- 

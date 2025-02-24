@@ -1,1 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Soul Survivor Calculator</title>
+  <style>
+    /* RESET / BASE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      /* Default "Dark" Theme */
+      background-color: #181716; /* near-black background */
+      color: #dcdad5;           /* light grayish text */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.4;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+    }
 
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #b7b3ad;
+    }
+    .right-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .coffee-btn {
+      height: 40px;
+      width: 130px;
+    }
+    .secondary-btn {
+      margin-left: 10px;
+      background: #2d2a26;
+      padding: 6px 12px;
+      color: #dcdad5;
+      border-radius: 4px;
+      text-decoration: none;
+      border: 1px solid #3a3732;
+    }
+
+    /* STATS SECTION (Default Dark) */
+    .stats-section {
+      background-color: #201f1d;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .stats-grid h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      justify-content: flex-start;
+    }
+    .item label {
+      margin-right: 8px;
+      font-weight: 500;
+    }
+    .item input[type="number"],
+    .item input[type="text"] {
+      width: 60px;
+      padding: 4px;
+      text-align: center;
+      border: 1px solid #3a3732;
+      background: #2a2825;
+      color: #dcdad5;
+      border-radius: 4px;
+    }
+    .total {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      gap: 20px;
+    }
+    .total .column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .total button {
+      padding: 6px 10px;
+      background: #7c775e;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .total span {
+      font-size: 1.1rem;
+    }
+
+    /* CONTROLS SECTION (Default Dark) */
+    .controls-section {
+      margin-bottom: 20px;
+      background-color: #201f1d;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .controls-grid .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    .controls-grid .item button {
+      padding: 4px 8px;
+      margin: 0 4px;
+      background: #7c775e;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .controls-grid .item input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    /* CREATURE SECTION (Default Dark) */
+    .creatures-section {
+      background-color: #201f1d;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .creatures-section h3 {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .creatures-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      justify-items: center;
+    }
+    .creatures-grid .item {
+      background-color: #2a2825;
+      border-radius: 4px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .creatures-grid .controls-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .creatures-grid .controls-line button {
+      padding: 6px 8px;
+      background: #7c775e;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .creatures-grid .controls-line input[type="number"] {
+      width: 50px;
+      text-align: center;
+      background: #2a2825;
+      border: 1px solid #3a3732;
+      color: #dcdad5;
+      border-radius: 4px;
+    }
+    .creatures-grid .creature-label {
+      font-size: 0.9rem;
+    }
+
+    /* FOOTER (Default Dark) */
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer p {
+      font-size: 0.9rem;
+      color: #b7b3ad;
+    }
+    .moon-btn {
+      padding: 8px 14px;
+      background: #7c775e;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* TOOLTIP STYLES */
+    .tooltip-trigger {
+      position: relative;
+      cursor: pointer;
+    }
+    .tooltip-content {
+      display: none;
+      position: absolute;
+      top: 120%;
+      left: 0;
+      background-color: #000000cc;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      white-space: nowrap;
+      z-index: 999;
+    }
+    .tooltip-trigger:hover .tooltip-content {
+      display: block;
+    }
+    sup {
+      font-size: smaller;
+      vertical-align: super;
+    }
+
+    /*
+     -----------------------------------------------------
+       2ND THEME ("light")
+     -----------------------------------------------------
+    */
+    .light {
+      background: #2c2a28;
+      color: #e2e0dc;
+    }
+    .light .stats-section,
+    .light .controls-section,
+    .light .creatures-section {
+      background-color: #3b3937;
+    }
+    .light .item input[type="number"],
+    .light .item input[type="text"] {
+      background: #4a4744;
+      color: #e2e0dc;
+      border: 1px solid #605e5b;
+    }
+    .light .creatures-grid .item {
+      background-color: #4a4744;
+      color: #e2e0dc;
+      border: 1px solid #605e5b;
+    }
+    .light .total button,
+    .light .controls-grid .item button,
+    .light .moon-btn {
+      background: #726e68;
+    }
+
+    /*
+     -----------------------------------------------------
+       3RD THEME ("genuineLight")
+     -----------------------------------------------------
+    */
+    .genuineLight {
+      background: #f2f2f2;
+      color: #2c2c2c;
+    }
+    .genuineLight .stats-section,
+    .genuineLight .controls-section,
+    .genuineLight .creatures-section {
+      background-color: #ffffff;
+    }
+    .genuineLight .item input[type="number"],
+    .genuineLight .item input[type="text"] {
+      background: #e9ecef;
+      color: #2c2c2c;
+      border: 1px solid #ccc;
+    }
+    .genuineLight .creatures-grid .item {
+      background-color: #f8f9fa;
+      color: #2c2c2c;
+      border: 1px solid #ddd;
+    }
+    .genuineLight .total button,
+    .genuineLight .controls-grid .item button,
+    .genuineLight .moon-btn {
+      background: #999;
+      color: #fff;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+	
+	    /* FAQ Modal Styles */
+    .faq-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .faq-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      position: relative;
+      border-radius: 8px;
+      text-align: left;
+      color: #000;
+    }
+    .faq-close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .faq-close:hover,
+    .faq-close:focus {
+      color: black;
+      text-decoration: none;
+    }
+
+	/* Default (Dark) Theme FAQ */
+	body:not(.light):not(.genuineLight) .faq-content {
+	  background-color: #201f1d;  /* A dark panel color */
+	  color: #dcdad5;            /* Matching text color */
+	  border: 1px solid #3a3732;
+	}
+
+	/* Light Theme FAQ */
+	body.light .faq-content {
+	  background-color: #3b3937;  /* Use panel color from light theme */
+	  color: #e2e0dc;
+	  border: 1px solid #605e5b;
+	}
+
+	/* Genuine Light Theme FAQ */
+	body.genuineLight .faq-content {
+	  background-color: #ffffff;  /* White panel for high contrast */
+	  color: #2c2c2c;
+	  border: 1px solid #ddd;
+	}
+
+	.genuineLight .secondary-btn {
+	  color: #dcdad5;
+	}
+    a:visited {
+      color: inherit;
+    }
+  </style>
+</head>
+<body class="light" onload="resetFields()">
+  <div class="container">
+    <!-- HEADER -->
+	<div class="header">
+	  <div>
+		<h1>Soul Survivor Calculator</h1>
+		<p class="subtitle">Last updated 02/23/2025</p>
+	  </div>
+	  <div class="right-links">
+		<a href="index.html" class="secondary-btn">Bounty Hunt</a>
+		<a href="bountyclash.html" class="secondary-btn">Bounty Clash</a>
+		<a href="soulsurvivor.html" class="secondary-btn"><i>Soul Survivor</i></a>
+		<button id="faqButton" class="secondary-btn">FAQ</button>
+		<a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
+		  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+			   alt="Buy Me A Coffee"
+			   class="coffee-btn">
+		</a>
+	  </div>
+	</div>
+
+	<!-- Tooltip Icon -->
+<svg style="display: none;">
+  <defs>
+    <symbol id="question-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+    </symbol>
+  </defs>
+</svg>
+
+    <!-- STATS SECTION -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div>
+          <h3>Bloodline Rank Calculator:<sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+            <span class="tooltip-content">These three values are for reference<br>and are not affected by any inputs.</span>
+          </sup></h3>
+          <div class="item">
+            <label>Bloodline Rank:</label>
+            <input type="number" id="bloodlineRank" value="1" min="1" max="100" oninput="updateBloodlineXP()">
+          </div>
+          <div class="item">
+            <label>Estimated Bloodline XP:</label>
+            <span id="estimatedBloodlineXP">0</span>
+          </div>
+          <div class="item">
+            <label>XP To Bloodline Rank 100:</label>
+            <span id="xpToRank100">0</span>
+          </div>
+        </div>
+        <div>
+          <h3>XP Earned This Match:<sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+            <span class="tooltip-content">To determine Prestige eligibility,<br>compare "<u>Bonus Bloodline XP:</u>"<br>with <u>"XP To Bloodline Rank 100:"</u></span>
+          </sup></h3>
+          <div class="item">
+            <label>Bonus Bloodline XP:</label>
+            <span id="bonusBloodlineXP">0</span>
+          </div>
+          <div class="item">
+            <label>Estimated Hunter Level:</label>
+            <span id="estimatedLevel">1</span>
+          </div>
+          <div class="item">
+            <label>XP to Next Level:</label>
+            <span id="xpToNextLevel">100</span>
+          </div>
+          <div class="item">
+            <label>XP to Level 50:</label>
+            <span id="xpRemaining">21100</span>
+          </div>
+        </div>
+      </div>
+      <div class="total">
+        <div class="column">
+          <button onclick="resetFields()">Reset</button>
+          <span>Total XP: <strong id="totalXP">0</strong></span>
+        </div>
+      </div>
+    </section>
+    <!-- CONTROLS SECTION -->
+    <section class="controls-section">
+      <div class="controls-grid">
+        <!-- LEFT COLUMN -->
+        <div>
+          <!-- Replaced Prestige XP Boost checkbox with a number input -->
+          <div class="item">
+            <label for="prestigeBoost">Current Prestige</label>
+            <input type="number" id="prestigeBoost" min="1" max="100" oninput="updatePrestigeBoost(); updateTotal();" style="width:60px;">
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">
+                10% XP Boost starts at prestige 21<br>
+                and then occurs at every level<br>
+                except those ending in 0 or 5.<br>
+                <b>Example:</b><br>
+                21, 22, 23, 24, 26, 27, 28, 29
+              </span>
+            </span>
+            <span id="prestigeBoostIndicator"></span>
+          </div>
+          <div class="item" style="display: none;">
+            <input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()">
+            <label>First Daily Extract (+15%)</label>
+          </div>
+          <div class="item" style="display: none;">
+            <input type="checkbox" data-xp="600" id="duoTrio" onchange="updateTotal(); soloselection(this)">
+            <label>Duo VS Trio (600 XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content"><b>Contract Bonus</b><p>Applies on extract with bounty<br><b>Accolades:</b><p>Contract Status</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <input type="checkbox" data-xp="100" id="cleanSweep" onchange="updateTotal()">
+            <label>Clean Sweep (100 XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">Kill, Banish and Extract</span>
+            </sup>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="deathPenalty" onchange="handleDeathPenalty()">
+            <label>Death (½ XP to Bloodline)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">
+                Bonus Bloodline XP awarded for Level milestones<br>
+                during the match are awarded on death in full;<br>
+                Level 4 (250), 9 (250), 13 (250), 19 (500),<br>26 (500), 34 (500), 42 (750), 50 (1000)
+              </span>
+            </sup>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="firstToDie" onchange="handleFirstToDie()">
+            <label>First To Die</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">
+                100 XP awarded is halved, granting only 50 XP to bloodline.<br><b>Accolades:</b><br>Bad Luck (25BP)
+              </span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <input type="checkbox" data-bonus="50" id="soloDuo" onchange="updateTotal(); soloselection(this)">
+            <label>Solo Duo</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">100 XP awarded is halved, granting only 50 XP to bloodline.<br><b>Accolades:</b> Bad Luck (25BP)</span>
+            </sup>
+          </div>
+          <div class="item">
+            <input type="checkbox" data-xp="300" id="wellspringactivate" onchange="updateTotal()">
+            <label>Wellspring Activation (300 XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content"><b>Accolades</b><br>Wellspring Activated (75 BP)</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <input type="checkbox" id="startingLevel50" onchange="handleStartingLevel50()">
+            <label>Starting Match As Level 50</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">If enabled, all XP earned this match<br>goes directly into Bonus Bloodline XP.</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <label>Extraction Time Remaining:</label>
+            <input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)">
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">Match time remaining.<p>Example:<p>23:05</span>
+            </sup>
+          </div>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div>
+          <div class="item">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="riftpickups" placeholder="#" min="0" max="4" oninput="updateTotal(); validateRiftInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Rifts Closed (100 XP)</label>
+          </div>
+          <div class="item">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="energypickups" placeholder="#" min="0" max="450" oninput="updateTotal(); validateenergyInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Energy Absorbed (4 XP)</label>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="bosskills" placeholder="#" min="0" max="2" oninput="updateTotal(); validateBossInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Boss Kills [Team Queue] (400 XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content"><b>Accolades:</b><br>Killed (100 BP)</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="solobosskills" placeholder="#" min="0" max="2" oninput="updateTotal(); validatesoloBossInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Boss Kills [Solo Queue] (800 XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content"><b>Accolades:</b><br>Solo Kill Bonus (100 BP)<br>Killed (100 BP)</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="Tokenpickups" placeholder="#" min="0" max="4" oninput="updateTotal(); validateTokenInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Tokens Extracted (500 XP)</label>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="banishpickups" placeholder="#" min="0" max="2" oninput="updateTotal(); validateBanishInput();">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Boss Banishes (350 XP)</label>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="envelopeXP" placeholder="#" maxlength="2" oninput="updateTotal()">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Hunter XP Envelopes (1000 XP)</label>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="bloodlineEnvelopeXP" placeholder="#" maxlength="2" oninput="updateTotal()">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Bloodline XP Envelopes (500 BL XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">Envelopes are unaffected by<br>death penalty XP reduction.</span>
+            </sup>
+          </div>
+          <div class="item" style="display: none;">
+            <button onclick="adjustCount(this, -1)">-</button>
+            <input type="number" id="retireLevel50" placeholder="#" maxlength="3" min="0" max="100" oninput="updateTotal()">
+            <button onclick="adjustCount(this, 1)">+</button>
+            <label>Retire a Level 50 (10000 BL XP)</label>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
+              <span class="tooltip-content">Retiring a Level 50 Hunter at <br><b>Bloodline Rank 92</b><br>should level you to Rank 100 Prestige.</span>
+            </sup>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- CREATURES SECTION -->
+    <section class="creatures-section">
+      <h3>PVP and Monster Kills</h3>
+      <div id="creatures" class="creatures-grid">
+        <!-- Dynamically appended by JS -->
+      </div>
+    </section>
+    <!-- FOOTER -->
+    <div class="footer">
+      <button class="moon-btn" onclick="tdnn()">Toggle Theme</button>
+    </div>
+  </div>
+  
+  <!-- FAQ Modal -->
+  <div id="faqModal" class="faq-modal">
+    <div class="faq-content">
+      <span id="faqClose" class="faq-close">&times;</span>
+      <h2>Frequently Asked Questions</h2><br>
+      <p><strong>Q:</strong> What is this?</p>
+      <p><strong>A:</strong> A way to calculate progression in Hunt: Showdown 1896.</p><br>
+      <p><strong>Q:</strong> What are some of the features?</p>
+      <p><strong>A:</strong> Some quality of life features include;</p>
+      <p>• Adds bonus bloodline XP at key hunter level milestones.</p>
+      <p>• Credits all XP earned after reaching level 50 to your bloodline.</p>
+      <p>• Applies a 10% boost for valid Prestige levels.</p><br>
+      <p><strong>Q:</strong> How do I reset the fields?</p>
+      <p><strong>A:</strong> Click the "Reset" button to clear all inputs.</p><br>
+      <p><strong>Q:</strong> What doesn't this calculate?</p>
+      <p><strong>A:</strong> Hunt dollars and weapon XP. Dark Tribute Bonus XP also isn't factored - this can be claimed 4 times daily at the main menu.</p><br>
+      <p><strong>Q:</strong> I found a bug or error.</p>
+      <p><strong>A:</strong> You can reach me at:</p> 
+      <p>
+        <a href="https://www.reddit.com/user/SopranoConcertina/" target="_blank">
+          <img src="https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png" alt="Reddit" style="height:16px; vertical-align:middle; margin-right:4px;">SopranoConcertina
+        </a>
+        or on 
+        <a href="http://discordapp.com/users/658685123549593601" target="_blank">
+          <img src="https://i.imgur.com/hIxR9DX.png" alt="Discord" style="height:16px; vertical-align:middle; margin-right:4px;">anthonyjsoprano
+        </a>
+      </p><br>
+      <p><strong>Q:</strong> Can I buy you a coffee?</p>
+      <p><strong>A:</strong> Absolutely -- coffee fuels creativity! I've dedicated many hours to building this calculator for fellow Hunters, and every little bit helps keep it updated and ready for future events. <p>If you'd like to support my work or if this helped you, consider buying me a coffee:
+      <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height:24px; vertical-align:middle; margin-left:4px;">
+      </a> <br>Thanks a bunch, see you on the bayou!</p><br>
+    </div>
+  </div>
+
+
+  <!-- JAVASCRIPT -->
+  <script>
+    /* 1. Bloodline XP Table */
+    const bloodlineXPTable = [
+      0, 250, 750, 1300, 1800, 2300, 2800, 3300, 3800, 4300,
+      4800, 5300, 5800, 6300, 6800, 7300, 7800, 8300, 8800, 9300,
+      9800, 10300, 10800, 11300, 11800, 12300, 12800, 13300, 13800, 14300,
+      14800, 15300, 15800, 16800, 17800, 18800, 19800, 20800, 21800, 22800,
+      23800, 24800, 25800, 26800, 27800, 28800, 29800, 30800, 31800, 32800,
+      33800, 34800, 35800, 36800, 37800, 38800, 39800, 40800, 41800, 42800,
+      43800, 44800, 45800, 46800, 47800, 48800, 50300, 51800, 53300, 54800,
+      56300, 57800, 59300, 60800, 62300, 63800, 65300, 66800, 68300, 69800,
+      71300, 72800, 74300, 75800, 77300, 78800, 80300, 81800, 83300, 84800,
+      86300, 87800, 89300, 90800, 92300, 93800, 95300, 96800, 98300, 99800,
+      99800
+    ];
+
+    /* 2. Creature Array */
+    const creatures = {
+      "&nbsp;Kill Hunter": 450,
+      /* "&nbsp;Revive Partner": 100, */
+      /* "&nbsp;Kill Teammate": -500, */
+      "&nbsp;Grunt": 20,
+      "&nbsp;Hellhound": 40,
+      "&nbsp;Hive": 60,
+      "&nbsp;Immolator": 60,
+      "&nbsp;Armoured": 60,
+      "&nbsp;Meathead": 300,
+      "&nbsp;Waterdevil": 20,
+      "&nbsp;Leech": 10
+    };
+
+	// Insert creature items
+	let creatureContainer = document.getElementById("creatures");
+	for (let [name, xp] of Object.entries(creatures)) {
+	  let div = document.createElement("div");
+	  div.className = "item";
+	  
+	  // Remove any HTML entities and trim whitespace to compare the name.
+	  let plainName = name.replace("&nbsp;", "").trim();
+	  let maxAttr = "";
+	  let onChangeHandler = "updateTotal()"; // default onchange
+	  if (plainName === "Kill Hunter") {
+		// Set maximum to 11 and use a custom validation function.
+		maxAttr = ' max="11"';
+		onChangeHandler = "validateKillHunter(this)";
+	  }
+	  
+	  div.innerHTML = `
+		<div class="controls-line">
+		  <button onclick="adjustCount(this, -1)">-</button>
+		  <input type="number" value="0" min="0"${maxAttr} data-xp="${xp}" onchange="${onChangeHandler}">
+		  <button onclick="adjustCount(this, 1)">+</button>
+		</div>
+		<div class="creature-label">${name} (${xp} XP)</div>
+	  `;
+	  creatureContainer.appendChild(div);
+	}
+
+	// Limit hunters killed to 11 via manual entry
+	function validateKillHunter(input) {
+	  let value = parseInt(input.value) || 0;
+	  if (value > 11) {
+		input.value = 11;
+	  }
+	  updateTotal();
+	}
+	
+    // 3. Update Bloodline Rank & XP
+    function updateBloodlineXP() {
+      let rank = parseInt(document.getElementById("bloodlineRank").value) || 1;
+			  if (rank > 100) {
+		  rank = 1;
+		} else {
+		  rank = Math.max(1, rank);
+		}
+      document.getElementById("bloodlineRank").value = rank;
+      let bloodlineXP = bloodlineXPTable[rank - 1];
+      document.getElementById("estimatedBloodlineXP").textContent = bloodlineXP;
+      let xpToRank100 = 99800 - bloodlineXP;
+      document.getElementById("xpToRank100").textContent = Math.max(0, xpToRank100);
+      updateTotal();
+    }
+
+    // 4. adjustCount for plus/minus
+    function adjustCount(button, change) {
+      let input = button.parentElement.querySelector("input");
+      let min = parseInt(input.min) || 0;
+      let max = parseInt(input.max) || Infinity;
+      let newValue = Math.min(max, Math.max(min, parseInt(input.value) + change));
+      input.value = newValue;
+      // Exclusivity: bosskills vs solobosskills
+      if (input.id === "bosskills" && newValue > 0) {
+        document.getElementById("solobosskills").value = 0;
+      } else if (input.id === "solobosskills" && newValue > 0) {
+        document.getElementById("bosskills").value = 0;
+      }
+      updateTotal();
+    }
+
+    // 5. Validate Extraction Time
+    let updateTotalTimeout;
+    function validateExtractionTime(input) {
+      const currentValue = input.value;
+      const sanitizedValue = currentValue.replace(/[^0-9:]/g, '');
+      input.value = sanitizedValue;
+      const isValidPartial = /^([0-5]?[0-9]:?)?([0-5]?[0-9])?$/.test(sanitizedValue);
+      if (!isValidPartial) {
+        input.value = input.dataset.previousValidValue || "";
+      } else {
+        input.dataset.previousValidValue = sanitizedValue;
+      }
+      clearTimeout(updateTotalTimeout);
+      updateTotalTimeout = setTimeout(updateTotal, 200);
+    }
+
+    // 6. Validate inputs for min/max
+    function validateRiftInput() {
+      let riftpickupsInput = document.getElementById("riftpickups");
+      let value = parseInt(riftpickupsInput.value) || 0;
+      if (value > 4) {
+        riftpickupsInput.value = 4;
+      } else if (value < 0) {
+        riftpickupsInput.value = 0;
+      }
+      updateTotal();
+    }
+    function validateenergyInput() {
+      let energypickupsInput = document.getElementById("energypickups");
+      let value = parseInt(energypickupsInput.value) || 0;
+      if (value > 450) energypickupsInput.value = 450;
+      else if (value < 0) {
+        energypickupsInput.value = 0;
+      }
+      updateTotal();
+    }
+    function validateBanishInput() {
+      let banishpickupsInput = document.getElementById("banishpickups");
+      let value = parseInt(banishpickupsInput.value) || 0;
+      if (value > 2) banishpickupsInput.value = 2;
+      else if (value < 0) {
+        banishpickupsInput.value = 0;
+      }
+      updateTotal();
+    }
+    function validateTokenInput() {
+      let TokenpickupsInput = document.getElementById("Tokenpickups");
+      let value = parseInt(TokenpickupsInput.value) || 0;
+      if (value > 4) {
+        TokenpickupsInput.value = 4;
+      } else if (value < 0) {
+        TokenpickupsInput.value = 0;
+      }
+      updateTotal();
+    }
+    function validateBossInput() {
+      let bosskillsInput = document.getElementById("bosskills");
+      let solobosskillsInput = document.getElementById("solobosskills");
+      let value = parseInt(bosskillsInput.value) || 0;
+      if (value > 2) bosskillsInput.value = 2;
+      if (value > 0) {
+        solobosskillsInput.value = 0;
+      }
+      updateTotal();
+    }
+    function validatesoloBossInput() {
+      let bosskillsInput = document.getElementById("bosskills");
+      let solobosskillsInput = document.getElementById("solobosskills");
+      let value = parseInt(solobosskillsInput.value) || 0;
+      if (value > 2) {
+        solobosskillsInput.value = 2;
+      }
+      if (value > 0) {
+        bosskillsInput.value = 0;
+      }
+      updateTotal();
+    }
+
+    // 7. Death Penalty & Starting Level 50
+    function handleDeathPenalty() {
+      const deathPenaltyCheckbox = document.getElementById("deathPenalty");
+      const startingLevel50 = document.getElementById("startingLevel50");
+      const firstToDie = document.getElementById("firstToDie");
+      const otherCheckboxes = [
+        "dailyExtractBoost", "soloDuo", "duoTrio", "cleanSweep",
+        "extractionTime", "Tokenpickups"
+      ];
+      if (deathPenaltyCheckbox.checked) {
+        disableElements(otherCheckboxes);
+        startingLevel50.checked = false;
+        startingLevel50.disabled = true;
+      } else {
+        // When Death is unchecked, also uncheck First To Die.
+        firstToDie.checked = false;
+        enableElements(otherCheckboxes);
+        startingLevel50.disabled = false;
+      }
+      updateTotal();
+    }
+    function handleStartingLevel50() {
+      const startingLevel50 = document.getElementById("startingLevel50").checked;
+      const deathPenalty = document.getElementById("deathPenalty");
+      if (startingLevel50) {
+        deathPenalty.checked = false;
+        deathPenalty.disabled = true;
+      } else {
+        deathPenalty.disabled = false;
+      }
+      updateTotal();
+    }
+
+    function disableElements(elements) {
+      elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          if (element.type === "checkbox") {
+            element.checked = false;
+          } else if (element.type === "text" || element.type === "number") {
+            element.value = 0;
+            disableButtons(element);
+          }
+          element.disabled = true;
+        }
+      });
+    }
+    function enableElements(elements) {
+      elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.disabled = false;
+          if (element.type === "number") {
+            enableButtons(element);
+          }
+        }
+      });
+    }
+    function disableButtons(element) {
+      const buttons = element.parentElement.querySelectorAll("button");
+      buttons.forEach(button => button.disabled = true);
+    }
+    function enableButtons(element) {
+      const buttons = element.parentElement.querySelectorAll("button");
+      buttons.forEach(button => button.disabled = false);
+    }
+
+    // 8. Update Progress (level)
+    function updateProgress(totalXP) {
+      const xpTable = [
+        0, 100, 200, 400, 600, 800, 1000, 1300, 1600, 1900,
+        2200, 2500, 2800, 3100, 3400, 3700, 4000, 4300, 4700, 5100,
+        5500, 5900, 6300, 6700, 7100, 7600, 8100, 8600, 9100, 9600,
+        10100, 10600, 11100, 11600, 12100, 12700, 13300, 13900, 14500, 15100,
+        15700, 16300, 16900, 17500, 18100, 18700, 19300, 19900, 20500, 21100
+      ];
+      let level = 1;
+      for (let i = 0; i < xpTable.length; i++) {
+        if (totalXP >= xpTable[i]) {
+          level = i + 1;
+        } else {
+          break;
+        }
+      }
+      document.getElementById("estimatedLevel").textContent = level;
+      let neededXP = (level < xpTable.length) ? xpTable[level] - totalXP : 0;
+      document.getElementById("xpToNextLevel").textContent = neededXP;
+      let remaining = 21100 - totalXP;
+      if (remaining < 0) {
+        remaining = 0;
+      }
+      document.getElementById("xpRemaining").textContent = remaining;
+    }
+
+    // 9. Main updateTotal function
+    function updateTotal() {
+      let totalXP = 0;
+      let multiplier = 1;
+      // Use the number entered for prestige boost if valid.
+      var prestigeValue = parseInt(document.getElementById("prestigeBoost").value);
+      if (!isNaN(prestigeValue) && isPrestigeValid(prestigeValue)) {
+        multiplier += 0.1;
+      }
+      if (document.getElementById("dailyExtractBoost").checked) multiplier += 0.15;
+
+      // If First To Die is checked, ensure Death is checked automatically.
+      if (document.getElementById("firstToDie").checked) {
+        document.getElementById("deathPenalty").checked = true;
+      }
+	  
+      // Checkboxes with data-xp
+      document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
+        totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
+      });
+      // Number inputs with data-xp
+      document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
+        let xp = (parseInt(input.value) || 0) * parseInt(input.getAttribute("data-xp"));
+        totalXP += xp * multiplier;
+      });
+
+      // Clues
+      let riftpickups = parseInt(document.getElementById("riftpickups").value) || 0;
+      totalXP += riftpickups * 100 * multiplier;
+      // Lairs
+      let energypickups = parseInt(document.getElementById("energypickups").value) || 0;
+      totalXP += energypickups * 4 * multiplier;
+      // Boss kills
+      let bosskills = parseInt(document.getElementById("bosskills").value) || 0;
+      totalXP += bosskills * 400 * multiplier;
+      // Solo boss kills
+      let solobosskills = parseInt(document.getElementById("solobosskills").value) || 0;
+      totalXP += solobosskills * 800 * multiplier;
+      // Banish
+      let banishpickups = parseInt(document.getElementById("banishpickups").value) || 0;
+      totalXP += banishpickups * 350 * multiplier;
+      // Tokens
+      let Tokenpickups = parseInt(document.getElementById("Tokenpickups").value) || 0;
+      totalXP += Tokenpickups * 500 * multiplier;
+      // Hunter XP envelopes (no multiplier)
+      let envelopeXP = parseInt(document.getElementById("envelopeXP").value) || 0;
+      totalXP += envelopeXP * 1000;
+      // Extraction Time
+      let extractionTimeStr = document.getElementById("extractionTime").value;
+      let extractionSeconds = 0;
+      if (extractionTimeStr) {
+        let parts = extractionTimeStr.split(':');
+        if (parts.length === 2) {
+          let minutes = parseInt(parts[0]) || 0;
+          let seconds = parseInt(parts[1]) || 0;
+          extractionSeconds = minutes * 60 + seconds;
+        } else if (parts.length === 1) {
+          extractionSeconds = (parseInt(parts[0]) || 0) * 60;
+        }
+      }
+      let extractionXP = (extractionSeconds > 0) ? (extractionSeconds / 15) * 4 : 0;
+      totalXP += extractionXP * multiplier;
+	  
+	  // Now calculate bonus XP based on conditions.
+      let bonusXP = 0;
+      if (document.getElementById("deathPenalty").checked) {
+        bonusXP += Math.round(totalXP / 2);
+      }
+      if (document.getElementById("firstToDie").checked) {
+        let ftBonus = 50;
+        if (!isNaN(prestigeValue) && isPrestigeValid(prestigeValue)) {
+          ftBonus = Math.round(50 * 1.1);
+        }
+        bonusXP += ftBonus;
+      }
+	  
+      // Milestone bonuses:
+      let estimatedLevel = parseInt(document.getElementById("estimatedLevel").textContent) || 1;
+      if (estimatedLevel >= 4) bonusXP += 250;
+      if (estimatedLevel >= 9) bonusXP += 250;
+      if (estimatedLevel >= 13) bonusXP += 250;
+      if (estimatedLevel >= 19) bonusXP += 500;
+      if (estimatedLevel >= 26) bonusXP += 500;
+      if (estimatedLevel >= 34) bonusXP += 500;
+      if (estimatedLevel >= 42) bonusXP += 750;
+      if (estimatedLevel >= 50) bonusXP += 1000;
+
+        // Add any overflow XP (when totalXP exceeds 21100) to bonusXP
+        let overflow = totalXP - 21100;
+        if (overflow > 0) {
+          bonusXP += overflow;
+        }
+        
+        let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
+        bonusXP += bloodlineEnvelopeXP * 500;
+    
+        let retireLevel50 = parseInt(document.getElementById("retireLevel50").value) || 0;
+        bonusXP += retireLevel50 * 10000;
+        bonusXP = Math.max(0, bonusXP);
+    
+
+	  
+      // Finally, update the DOM elements:
+      document.getElementById("bonusBloodlineXP").textContent = bonusXP;
+      document.getElementById("totalXP").textContent = Math.round(totalXP);
+      updateProgress(totalXP);
+    }
+
+    // 10. New functions for Prestige XP Boost input
+
+	function updatePrestigeBoost() {
+	  var prestigeInput = document.getElementById("prestigeBoost");
+	  var p = parseInt(prestigeInput.value);
+	  // Clamp value to [1, 100]
+	  if (isNaN(p)) {
+		p = 1;
+	  }
+	  if (p < 1) {
+		p = 1;
+		prestigeInput.value = p;
+	  }
+	  if (p > 100) {
+		p = 1;
+		prestigeInput.value = p;
+	  }
+	  var indicator = document.getElementById("prestigeBoostIndicator");
+	  // Two non-breaking spaces are added before the check mark.
+	  if (isPrestigeValid(p)) {
+		indicator.innerHTML = '&nbsp;&nbsp;<span style="color:green;">&#10003; +10% Boost</span>';
+	  } else {
+		indicator.innerHTML = '';
+	  }
+	}
+    function isPrestigeValid(p) {
+      // Valid if prestige is 21 or higher and does not end in 0 or 5.
+      return p >= 21 && (p % 10 !== 0 && p % 10 !== 5);
+    }
+
+    // 11. Reset Fields
+    function resetFields() {
+      document.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
+      document.querySelectorAll("input[type='text']").forEach(input => input.value = '');
+      document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+      });
+      document.getElementById("extractionTime").disabled = false;
+      document.getElementById("bloodlineRank").value = 1;
+      document.getElementById("bonusBloodlineXP").textContent = '0';
+      updateBloodlineXP();
+      document.getElementById("estimatedBloodlineXP").textContent = '0';
+      document.getElementById("xpToRank100").textContent = '99800';
+      updateBloodlineXP();
+      document.getElementById("totalXP").textContent = '0';
+      document.getElementById("xpRemaining").textContent = '21100';
+      document.getElementById("estimatedLevel").textContent = 1;
+      document.getElementById("xpToNextLevel").textContent = 100;
+      document.getElementById("bonusBloodlineXP").textContent = 0;
+      document.getElementById("envelopeXP").value = 0;
+      document.getElementById("bloodlineEnvelopeXP").value = 0;
+      document.getElementById("retireLevel50").value = 0;
+      document.getElementById("startingLevel50").checked = false;
+	  // Reset prestige boost input and its indicator:
+	  document.getElementById("prestigeBoost").value = 1;
+  	  document.getElementById("prestigeBoostIndicator").innerHTML = '';
+      const otherCheckboxes = [
+        "dailyExtractBoost", "soloDuo", "wellspringactivate", "duoTrio", "cleanSweep",
+        "extractionTime", "Tokenpickups"
+      ];
+      enableElements(otherCheckboxes);
+      document.getElementById("deathPenalty").checked = false;
+      document.querySelectorAll("#creatures input[type='number']").forEach(input => input.value = 0);
+      updateTotal();
+    }
+
+    /*
+      12. Tri-state Theme Toggle:
+      0 => default "Dark"
+      1 => second "Darkish Light" (.light)
+      2 => "Genuine Light" (.genuineLight)
+    */
+    let themeIndex = 1;
+    function tdnn() {
+      document.body.classList.remove("light", "genuineLight");
+      themeIndex = (themeIndex + 1) % 3;
+      if (themeIndex === 1) {
+        document.body.classList.add("light");
+      } else if (themeIndex === 2) {
+        document.body.classList.add("genuineLight");
+      }
+    }
+
+    // 13. Handle First To Die: Checking "First To Die" automatically checks "Death"
+    function handleFirstToDie() {
+      const first = document.getElementById("firstToDie");
+      const death = document.getElementById("deathPenalty");
+      if (first.checked) {
+        death.checked = true;
+      }
+      updateTotal();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      resetFields();
+    });
+	
+	    /* FAQ Modal JavaScript */
+    document.getElementById("faqButton").addEventListener("click", function() {
+      document.getElementById("faqModal").style.display = "block";
+    });
+    document.getElementById("faqClose").addEventListener("click", function() {
+      document.getElementById("faqModal").style.display = "none";
+    });
+    window.addEventListener("click", function(event) {
+      if (event.target == document.getElementById("faqModal")) {
+        document.getElementById("faqModal").style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 Click here to view the XP calculator: 
 
-https://jgdf42.github.io/huntxpcalc/index.html
+https://jgdf42.github.io/huntxpcalc/
 
 ## Frequently Asked Questions
 

@@ -1164,16 +1164,17 @@ totalXP += envelopeXP * 1000;
           bonusXP += overflow;
         }
         
-// Bloodline XP Envelopes (no multiplier)
-let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
-if (bloodlineEnvelopeXP < 0) {
-  bloodlineEnvelopeXP = 0;
-  document.getElementById("bloodlineEnvelopeXP").value = 0;
-} else if (bloodlineEnvelopeXP > 50) {
-  bloodlineEnvelopeXP = 50;
-  document.getElementById("bloodlineEnvelopeXP").value = 50;
-}
-totalXP += bloodlineEnvelopeXP * 500;
+		// Bloodline XP Envelopes (no multiplier) credited to Bonus Bloodline XP
+		let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
+		if (bloodlineEnvelopeXP < 0) {
+		  bloodlineEnvelopeXP = 0;
+		  document.getElementById("bloodlineEnvelopeXP").value = 0;
+		} else if (bloodlineEnvelopeXP > 50) {
+		  bloodlineEnvelopeXP = 50;
+		  document.getElementById("bloodlineEnvelopeXP").value = 50;
+		}
+		bonusXP += bloodlineEnvelopeXP * 500;
+
     
         let retireLevel50 = parseInt(document.getElementById("retireLevel50").value) || 0;
         bonusXP += retireLevel50 * 10000;

@@ -1153,17 +1153,16 @@
         if (overflow > 0) {
           bonusXP += overflow;
         }
-        
-        let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
-        if (bloodlineEnvelopeXP < 0) {
-          bloodlineEnvelopeXP = 0;
-          document.getElementById("bloodlineEnvelopeXP").value = 0;
-        } else if (bloodlineEnvelopeXP > 50) {
-          bloodlineEnvelopeXP = 50;
-          document.getElementById("bloodlineEnvelopeXP").value = 50;
-        }
-        totalXP += bloodlineEnvelopeXP * 500;
-        
+		let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
+		if (bloodlineEnvelopeXP < 0) {
+		  bloodlineEnvelopeXP = 0;
+		  document.getElementById("bloodlineEnvelopeXP").value = 0;
+		} else if (bloodlineEnvelopeXP > 50) {
+		  bloodlineEnvelopeXP = 50;
+		  document.getElementById("bloodlineEnvelopeXP").value = 50;
+		}
+		bonusXP += bloodlineEnvelopeXP * 500;
+
         let retireLevel50 = parseInt(document.getElementById("retireLevel50").value) || 0;
         bonusXP += retireLevel50 * 10000;
         bonusXP = Math.max(0, bonusXP);

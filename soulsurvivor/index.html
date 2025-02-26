@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Soul Survivor Calculator</title>
+  <title>Soul Survivor Calc</title>
+  <link rel="icon" type="image/png" href="https://www.hunterxp.com/ico.png" sizes="32x32" />
   <style>
     /* RESET / BASE */
     * {
@@ -399,8 +400,22 @@
     <!-- HEADER -->
 	<div class="header">
 	  <div>
-		<h1>Soul Survivor Calculator</h1>
-		<p class="subtitle">Last updated 02/23/2025</p>
+<h1>Soul Survivor Calculator</h1>
+		<p class="subtitle">Last updated 02/25/2025
+		&nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
+              <span class="tooltip-content">
+                <b>Changelog:</b><br>• Refined math on Extraction Time Remaining<br><br>
+									 • Increased Clean Sweep max to 2<br><br>
+									 • Changed 250 Bloodline XP milestone from<br>
+									    Level 9 to 8 (UI shows 9 in-game, but<br>
+										awards on 8 due to bug?)<br><br>
+									 • Renamed Bounty Tokens Extracted to<br>Boss Bounty Tokens Extracted<br><br>
+									 • Added Event Bounty Tokens Extracted<br><br>
+									 • Added Event Hunter XP Envelopes<br><br>
+									 • Limited envelope maximum to 50<br><br>
+									 • XP To Next Level now shows only <br>1 digit after decimal<br>
+              </span>
+            </sup></p>
 	  </div>
 	  <div class="right-links">
 		<a href="/" class="secondary-btn">Bounty Hunt</a>
@@ -415,15 +430,19 @@
 	  </div>
 	</div>
 
-	<!-- Tooltip Icon -->
-<svg style="display: none;">
-  <defs>
-    <symbol id="question-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-      <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
-    </symbol>
-  </defs>
-</svg>
+    <!-- Tooltip Icon -->
+    <svg style="display: none;">
+      <defs>
+        <symbol id="question-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+        </symbol>	
+		<symbol id="chat-left-text" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+		<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+		</symbol>
+      </defs>
+    </svg>
 
     <!-- STATS SECTION -->
     <section class="stats-section">
@@ -519,7 +538,7 @@
               <span class="tooltip-content">
                 Bonus Bloodline XP awarded for Level milestones<br>
                 during the match are awarded on death in full;<br>
-                Level 4 (250), 9 (250), 13 (250), 19 (500),<br>26 (500), 34 (500), 42 (750), 50 (1000)
+                Level 4 (250), 9 (250), 13 (250), 19 (500),<br>26 (500), 34 (500), 42 (750), 50 (1000)<br><b>NOTE: Do not use if you have Death Cheat trait.</b>
               </span>
             </sup>
           </div>
@@ -554,7 +573,7 @@
             </sup>
           </div>
           <div class="item" style="display: none;">
-            <label>Extraction Time Remaining:</label>
+            <label>Extraction Time Remaining With Bounty:</label>
             <input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)">
             <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">Match time remaining.<p>Example:<p>23:05</span>
@@ -607,13 +626,13 @@
           </div>
           <div class="item" style="display: none;">
             <button onclick="adjustCount(this, -1)">-</button>
-            <input type="number" id="envelopeXP" placeholder="#" maxlength="2" oninput="updateTotal()">
+            <input type="number" id="envelopeXP" placeholder="#" maxlength="2" min="0" max="50" oninput="updateTotal()">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Hunter XP Envelopes (1000 XP)</label>
           </div>
           <div class="item" style="display: none;">
             <button onclick="adjustCount(this, -1)">-</button>
-            <input type="number" id="bloodlineEnvelopeXP" placeholder="#" maxlength="2" oninput="updateTotal()">
+            <input type="number" id="bloodlineEnvelopeXP" placeholder="#" maxlength="2" min="0" max="50" oninput="updateTotal()">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Bloodline XP Envelopes (500 BL XP)</label>
             <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
@@ -677,6 +696,7 @@
       <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
       <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height:24px; vertical-align:middle; margin-left:4px;">
       </a> <br>Thanks a bunch, see you on the bayou!</p><br>
+	  <br><h5>Special thanks: Bious, Richkan</h5>
     </div>
   </div>
 
@@ -764,6 +784,28 @@
       document.getElementById("xpToRank100").textContent = Math.max(0, xpToRank100);
       updateTotal();
     }
+
+// Hunter XP Envelopes (no multiplier)
+let envelopeXP = parseInt(document.getElementById("envelopeXP").value) || 0;
+if (envelopeXP < 0) {
+  envelopeXP = 0;
+  document.getElementById("envelopeXP").value = 0;
+} else if (envelopeXP > 50) {
+  envelopeXP = 50;
+  document.getElementById("envelopeXP").value = 50;
+}
+totalXP += envelopeXP * 1000;
+
+// Bloodline XP Envelopes (no multiplier)
+let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
+if (bloodlineEnvelopeXP < 0) {
+  bloodlineEnvelopeXP = 0;
+  document.getElementById("bloodlineEnvelopeXP").value = 0;
+} else if (bloodlineEnvelopeXP > 50) {
+  bloodlineEnvelopeXP = 50;
+  document.getElementById("bloodlineEnvelopeXP").value = 50;
+}
+totalXP += bloodlineEnvelopeXP * 500;
 
     // 4. adjustCount for plus/minus
     function adjustCount(button, change) {
@@ -945,7 +987,7 @@
       }
       document.getElementById("estimatedLevel").textContent = level;
       let neededXP = (level < xpTable.length) ? xpTable[level] - totalXP : 0;
-      document.getElementById("xpToNextLevel").textContent = neededXP;
+      document.getElementById("xpToNextLevel").textContent = Math.round(neededXP * 10) / 10;
       let remaining = 21100 - totalXP;
       if (remaining < 0) {
         remaining = 0;
@@ -1032,7 +1074,7 @@
       // Milestone bonuses:
       let estimatedLevel = parseInt(document.getElementById("estimatedLevel").textContent) || 1;
       if (estimatedLevel >= 4) bonusXP += 250;
-      if (estimatedLevel >= 9) bonusXP += 250;
+      if (estimatedLevel >= 8) bonusXP += 250;
       if (estimatedLevel >= 13) bonusXP += 250;
       if (estimatedLevel >= 19) bonusXP += 500;
       if (estimatedLevel >= 26) bonusXP += 500;

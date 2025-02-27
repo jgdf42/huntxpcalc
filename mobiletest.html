@@ -325,95 +325,32 @@
       background: #999;
       color: #fff;
     }
-    @media (max-width: 700px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
+    /* Enhanced Mobile Styles: more pronounced differences */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
       }
-      .controls-grid {
+      .stats-grid, .controls-grid {
         grid-template-columns: 1fr;
       }
       .header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 10px;
       }
-    }
-    /* FAQ Modal Styles */
-    .faq-modal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-    .faq-content {
-      background-color: #fefefe;
-      margin: 10% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 500px;
-      position: relative;
-      border-radius: 8px;
-      text-align: left;
-      color: #000;
-    }
-    .faq-close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .faq-close:hover,
-    .faq-close:focus {
-      color: black;
-      text-decoration: none;
-    }
-    body:not(.light):not(.genuineLight) .faq-content {
-      background-color: #201f1d;
-      color: #dcdad5;
-      border: 1px solid #3a3732;
-    }
-    body.light .faq-content {
-      background-color: #3b3937;
-      color: #e2e0dc;
-      border: 1px solid #605e5b;
-    }
-    body.genuineLight .faq-content {
-      background-color: #ffffff;
-      color: #2c2c2c;
-      border: 1px solid #ddd;
-    }
-    .genuineLight .secondary-btn {
-      color: #dcdad5;
-    }
-    a:visited {
-      color: inherit;
-    }
-    .new-badge {
-      display: inline-block;
-      background-color: red;
-      color: white;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 0.75em;
-      font-weight: bold;
-      box-shadow: 0 0 3px rgba(255, 0, 0, 0.8);
-      margin-left: 4px;
-    }
-    .beta-badge {
-      display: inline-block;
-      background-color: orange;
-      color: white;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 0.75em;
-      font-weight: bold;
-      margin-left: 4px;
+      body {
+        font-size: 18px;
+      }
+      .item input[type="number"],
+      .item input[type="text"],
+      .item select {
+        width: 80px;
+        padding: 6px;
+      }
+      .secondary-btn, .moon-btn {
+        padding: 10px 16px;
+        font-size: 1rem;
+      }
     }
     /* Optional: Mobile-specific tweaks using the mobile class */
     .mobile .container {
@@ -422,13 +359,9 @@
   </style>
   <!-- Mobile detection script: adds a "mobile" class if a mobile device is detected -->
   <script>
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       document.documentElement.classList.add('mobile');
     }
-	  // This checks for common mobile device identifiers in the user agent string.
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    document.documentElement.classList.add('mobile');
-  }
   </script>
 </head>
 <body class="light" onload="resetFields()">

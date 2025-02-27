@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- The meta viewport tag ensures proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bounty Hunt Calc</title>
   <link rel="icon" type="image/png" href="https://www.hunterxp.com/ico.png" sizes="32x32" />
@@ -28,7 +27,6 @@
       "image": "https://www.hunterxp.com/xp.png"
     }
   </script>
-  <!-- Responsive and Mobile Styles -->
   <style>
     /* RESET / BASE */
     * {
@@ -325,42 +323,111 @@
       background: #999;
       color: #fff;
     }
-    /* Enhanced Mobile Styles: more pronounced differences */
-    @media (max-width: 600px) {
-      .container {
-        padding: 10px;
+    @media (max-width: 700px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
       }
-      .stats-grid, .controls-grid {
+      .controls-grid {
         grid-template-columns: 1fr;
       }
       .header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-      }
-      body {
-        font-size: 18px;
-      }
-      .item input[type="number"],
-      .item input[type="text"],
-      .item select {
-        width: 80px;
-        padding: 6px;
-      }
-      .secondary-btn, .moon-btn {
-        padding: 10px 16px;
-        font-size: 1rem;
       }
     }
-    /* Optional: Mobile-specific tweaks using the mobile class */
-    .mobile .container {
-      padding: 10px;
+    /* FAQ Modal Styles */
+    .faq-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .faq-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      position: relative;
+      border-radius: 8px;
+      text-align: left;
+      color: #000;
+    }
+    .faq-close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .faq-close:hover,
+    .faq-close:focus {
+      color: black;
+      text-decoration: none;
+    }
+    body:not(.light):not(.genuineLight) .faq-content {
+      background-color: #201f1d;
+      color: #dcdad5;
+      border: 1px solid #3a3732;
+    }
+    body.light .faq-content {
+      background-color: #3b3937;
+      color: #e2e0dc;
+      border: 1px solid #605e5b;
+    }
+    body.genuineLight .faq-content {
+      background-color: #ffffff;
+      color: #2c2c2c;
+      border: 1px solid #ddd;
+    }
+    .genuineLight .secondary-btn {
+      color: #dcdad5;
+    }
+    a:visited {
+      color: inherit;
+    }
+	.new-badge {
+	  display: inline-block;
+	  background-color: red;
+	  color: white;
+	  border-radius: 4px;
+	  padding: 2px 6px;
+	  font-size: 0.75em;
+	  font-weight: bold;
+	  box-shadow: 0 0 3px rgba(255, 0, 0, 0.8);
+	  margin-left: 4px;
+	}
+	.beta-badge {
+	  display: inline-block;
+	  background-color: orange;
+	  color: white;
+	  border-radius: 4px;
+	  padding: 2px 6px;
+	  font-size: 0.75em;
+	  font-weight: bold;
+	  margin-left: 4px;
+	}
+    /* Mobile Browser Adjustments:
+       When a mobile browser is detected, make the font very small
+       for everything in the second section (Controls Section)
+    */
+    body.mobile .controls-section,
+    body.mobile .controls-section * {
+      font-size: 10px !important;
     }
   </style>
-  <!-- Mobile detection script: adds a "mobile" class if a mobile device is detected -->
   <script>
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      document.documentElement.classList.add('mobile');
+    // Detect mobile browsers based on user agent and add a "mobile" class to the body
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("mobile");
+      });
     }
   </script>
 </head>
@@ -371,15 +438,12 @@
       <div>
         <h1>Bounty Hunt Calculator</h1>
         <p class="subtitle">Last updated 02/27/2025
-          &nbsp;&nbsp;<sup class="tooltip-trigger">
-            <svg width="16" height="16">
-              <use xlink:href="#chat-left-text"></use>
-            </svg>
+          &nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
             <span class="tooltip-content">
-              <b>Known Issues:</b><br>• XP ranges for levels slightly<br>out of sync due to no published numbers by Crytek.<br><br>
+			  <b>Known Issues:</b><br>• XP ranges for levels slightly<br>out of sync due to no published numbers by Crytek.<br><br>
               <b>Changelog:</b><br>• Added "Start At Level" feature <span class="beta-badge">BETA</span><span class="new-badge">NEW!</span><br><br>
-              • Pressing R on keyboard now resets all fields <span class="new-badge">NEW!</span><br><br>
-              • Refined math on Extraction Time Remaining<br><br>
+			  • Pressing R on keyboard now resets all fields <span class="new-badge">NEW!</span><br><br>
+			  • Refined math on Extraction Time Remaining<br><br>
               • Increased Clean Sweep max to 2<br><br>
               • Changed 250 Bloodline XP milestone from<br>
                 Level 9 to 8 (UI shows 9 in-game, but<br>
@@ -424,10 +488,7 @@
     <section class="stats-section">
       <div class="stats-grid">
         <div>
-          <h3>Bloodline Rank Calculator:<sup class="tooltip-trigger">&nbsp;&nbsp;
-            <svg width="16" height="16">
-              <use xlink:href="#question-icon"></use>
-            </svg>
+          <h3>Bloodline Rank Calculator:<sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
             <span class="tooltip-content">These three values are for reference<br>and are not affected by any inputs.</span>
           </sup></h3>
           <div class="item">
@@ -444,10 +505,7 @@
           </div>
         </div>
         <div>
-          <h3>XP Earned This Match:<sup class="tooltip-trigger">&nbsp;&nbsp;
-            <svg width="16" height="16">
-              <use xlink:href="#question-icon"></use>
-            </svg>
+          <h3>XP Earned This Match:<sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
             <span class="tooltip-content">To determine Prestige eligibility,<br>compare "<u>Bonus Bloodline XP:</u>"<br>with <u>"XP To Bloodline Rank 100:"</u></span>
           </sup></h3>
           <div class="item">
@@ -525,15 +583,15 @@
           </div>
         </div>
       </div>
-      <div class="total">
-        <div class="column">
-          <div class="tooltip-trigger" style="display:inline-block;">
-            <button onclick="resetFields()"><u>R</u>eset</button>
-            <span class="tooltip-content" style="font-size:0.8rem;">Tip: You can press R to reset</span>
-          </div>
-          <span>Total XP: <strong id="totalXP">0</strong></span>
-        </div>
-      </div>
+<div class="total">
+  <div class="column">
+    <div class="tooltip-trigger" style="display:inline-block;">
+      <button onclick="resetFields()"><u>R</u>eset</button>
+      <span class="tooltip-content" style="font-size:0.8rem;">Tip: You can press R to reset</span>
+    </div>
+    <span>Total XP: <strong id="totalXP">0</strong></span>
+  </div>
+</div>
     </section>
 
     <!-- CONTROLS SECTION -->
@@ -544,10 +602,7 @@
           <div class="item">
             <label for="prestigeBoost">Current Prestige</label>
             <input type="number" id="prestigeBoost" min="1" max="100" oninput="updatePrestigeBoost(); updateTotal();" style="width:60px;">
-            &nbsp;&nbsp;<sup class="tooltip-trigger">
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            &nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">
                 10% XP Boost starts at prestige 21<br>
                 and then occurs at every level<br>
@@ -561,30 +616,21 @@
           <div class="item">
             <input type="checkbox" id="dailyExtractBoost" onchange="updateTotal()">
             <label>First Daily Extract (+15%)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">Each hunter in your roster can<br>perform this action once per day.<br><b>Accolades:</b><p>First Bounty Extraction</span>
             </sup>
           </div>
           <div class="item">
             <input type="checkbox" id="startingLevel50" onchange="handleStartingLevel50()">
             <label>Starting Match As Level 50</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">If enabled, all XP earned this match<br>goes directly into Bonus Bloodline XP</span>
             </sup>
           </div>
           <div class="item">
             <input type="checkbox" id="deathPenalty" onchange="handleDeathPenalty()">
             <label>Death (½ XP to Bloodline)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">
                 Bonus Bloodline XP awarded for Level milestones<br>
                 during the match are awarded on death in full;<br>
@@ -595,40 +641,28 @@
           <div class="item">
             <input type="checkbox" data-xp="1200" id="soloDuo" onchange="updateTotal(); soloselection(this); updateReviveKillState();">
             <label>Extract with Bounty in Solo VS Duo (1200 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content"><b>Contract Bonus</b><p>Requires at least<br>1 Bounty Token extracted</span>
             </sup>
           </div>
           <div class="item">
             <input type="checkbox" data-xp="2400" id="soloTrio" onchange="updateTotal(); soloselection(this); updateReviveKillState();">
             <label>Extract with Bounty in Solo VS Trio (2400 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content"><b>Contract Bonus</b><p>Requires at least<br>1 Bounty Token extracted</span>
             </sup>
           </div>
           <div class="item">
             <input type="checkbox" data-xp="600"  id="duoTrio" onchange="updateTotal(); soloselection(this); updateReviveKillState();">
             <label>Extract with Bounty in Duo VS Trio (600 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content"><b>Contract Bonus</b><p>Requires at least<br>1 Bounty Token extracted</span>
             </sup>
           </div>
           <div class="item">
             <label>Extraction Time Remaining With Bounty:</label>
             <input type="text" id="extractionTime" placeholder="mm:ss" maxlength="5" oninput="validateExtractionTime(this)">
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">Match time remaining,<br>requires at least 1 Bounty Token extracted.<p><b>Example:</b><p>23:05</span>
             </sup>
           </div>
@@ -673,10 +707,7 @@
             <input type="number" id="cluepickups" placeholder="#" min="0" max="6" oninput="updateTotal(); validateClueInput();">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Clues Found (200 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">If first clue collected is Boss,<br>only count one clue for that bounty.</span>
             </sup>
           </div>
@@ -691,10 +722,7 @@
             <input type="number" id="bosskills" placeholder="#" min="0" max="2" oninput="updateTotal(); validateBossInput();">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Boss Kills [Team Queue] (400 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content"><b>Accolades:</b><br>Killed (100 BP)</span>
             </sup>
           </div>
@@ -703,10 +731,7 @@
             <input type="number" id="solobosskills" placeholder="#" min="0" max="2" oninput="updateTotal(); validatesoloBossInput();">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Boss Kills [Solo Queue] (800 XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content"><b>Accolades:</b><br>Solo Kill Bonus (100 BP)<br>Killed (100 BP)</span>
             </sup>
           </div>
@@ -745,10 +770,7 @@
             <input type="number" id="bloodlineEnvelopeXP" placeholder="#" maxlength="2" min="0" max="50" oninput="updateTotal()">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Bloodline XP Envelopes (500 BL XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">Envelopes are unaffected by<br>death penalty XP reduction.</span>
             </sup>
           </div>
@@ -757,10 +779,7 @@
             <input type="number" id="retireLevel50" placeholder="#" maxlength="3" min="0" max="100" oninput="updateTotal()">
             <button onclick="adjustCount(this, 1)">+</button>
             <label>Retire a Level 50 (10000 BL XP)</label>
-            <sup class="tooltip-trigger">&nbsp;&nbsp;
-              <svg width="16" height="16">
-                <use xlink:href="#question-icon"></use>
-              </svg>
+            <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16"><use xlink:href="#question-icon"></use></svg>
               <span class="tooltip-content">Retiring a Level 50 Hunter at <br><b>Bloodline Rank 92</b><br>should level you to Rank 100 Prestige.</span>
             </sup>
           </div>
@@ -1190,6 +1209,7 @@
       let baselineXP = xpTable[startLevel - 1];
       
       if (startLevel === 50) {
+        // When starting as level 50, no progression XP is applied.
         document.getElementById("estimatedLevel").textContent = 50;
         document.getElementById("xpToNextLevel").textContent = 0;
         document.getElementById("xpRemaining").textContent = 0;
@@ -1203,6 +1223,7 @@
       } else if (startLevel === 1) {
         let effectiveXP = baselineXP + sessionXP;
         if (effectiveXP < xpTable[49]) {
+          // Not yet reached level 50
           let effectiveLevel = startLevel;
           for (let i = 0; i < xpTable.length; i++) {
             if (effectiveXP >= xpTable[i]) {
@@ -1237,6 +1258,7 @@
           document.getElementById("bonusBloodlineXP").textContent = bonusXP;
           document.getElementById("totalXP").textContent = Math.round(sessionXP);
         } else {
+          // Effective XP reached or exceeded level 50
           document.getElementById("estimatedLevel").textContent = 50;
           document.getElementById("xpToNextLevel").textContent = 0;
           document.getElementById("xpRemaining").textContent = 0;
@@ -1245,6 +1267,7 @@
           if (document.getElementById("deathPenalty").checked) {
             bonusXP += sessionXP / 2;
           }
+          // Add milestone bonus for reaching level 50
           bonusXP += 1000;
           let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
           bonusXP += bloodlineEnvelopeXP * 500;
@@ -1254,7 +1277,7 @@
           document.getElementById("bonusBloodlineXP").textContent = bonusXP;
           document.getElementById("totalXP").textContent = Math.round(sessionXP);
         }
-      } else {
+      } else { // For start levels between 2 and 49
         let effectiveXP = baselineXP + sessionXP;
         let effectiveLevel = startLevel;
         for (let i = startLevel; i < xpTable.length; i++) {

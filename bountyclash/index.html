@@ -392,28 +392,57 @@
     a:visited {
       color: inherit;
     }
-	.new-badge {
-	  display: inline-block;
-	  background-color: red;
-	  color: white;
-	  border-radius: 4px;
-	  padding: 2px 6px;
-	  font-size: 0.75em;
-	  font-weight: bold;
-	  box-shadow: 0 0 3px rgba(255, 0, 0, 0.8);
-	  margin-left: 4px;
-	}
-	.beta-badge {
-	  display: inline-block;
-	  background-color: orange;
-	  color: white;
-	  border-radius: 4px;
-	  padding: 2px 6px;
-	  font-size: 0.75em;
-	  font-weight: bold;
-	  margin-left: 4px;
-	}
+    .new-badge {
+      display: inline-block;
+      background-color: red;
+      color: white;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.75em;
+      font-weight: bold;
+      box-shadow: 0 0 3px rgba(255, 0, 0, 0.8);
+      margin-left: 4px;
+    }
+    .beta-badge {
+      display: inline-block;
+      background-color: orange;
+      color: white;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.75em;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+    /* Mobile Browser Adjustments */
+    body.mobile .controls-section,
+    body.mobile .controls-section * {
+      font-size: 10px !important;
+    }
+    body.mobile .creatures-section .item {
+      border-width: 0.5px !important;
+      padding: 4px !important;
+    }
+    body.mobile .creatures-section .controls-line button {
+      padding: 2px 4px !important;
+      font-size: 0.7rem !important;
+    }
+    body.mobile .creatures-section .controls-line input[type="number"] {
+      width: 30px !important;
+      font-size: 0.7rem !important;
+      padding: 2px !important;
+    }
+    body.mobile .creatures-section .creature-label {
+      font-size: 0.7rem !important;
+    }
   </style>
+  <script>
+    // Detect mobile browsers based on user agent and add a "mobile" class to the body
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("mobile");
+      });
+    }
+  </script>
 </head>
 <body class="light" onload="resetFields()">
   <div class="container">
@@ -424,10 +453,10 @@
         <p class="subtitle">Last updated 02/27/2025
           &nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
             <span class="tooltip-content">
-			  <b>Known Issues:</b><br>• XP ranges for levels slightly<br>out of sync due to no published numbers by Crytek.<br><br>
+              <b>Known Issues:</b><br>• XP ranges for levels slightly<br>out of sync due to no published numbers by Crytek.<br><br>
               <b>Changelog:</b><br>• Added "Start At Level" feature <span class="beta-badge">BETA</span><span class="new-badge">NEW!</span><br><br>
-			  • Pressing R on keyboard now resets all fields <span class="new-badge">NEW!</span><br><br>
-			  • Refined math on Extraction Time Remaining<br><br>
+              • Pressing R on keyboard now resets all fields <span class="new-badge">NEW!</span><br><br>
+              • Refined math on Extraction Time Remaining<br><br>
               • Increased Clean Sweep max to 2<br><br>
               • Changed 250 Bloodline XP milestone from<br>
                 Level 9 to 8 (UI shows 9 in-game, but<br>
@@ -516,7 +545,6 @@
           <div class="item">
             <label>Start Match at Level:</label>
             <select id="startMatchLevel" onchange="handleStartMatchLevelChange()">
-              <!-- Options 1 through 50 -->
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -571,15 +599,15 @@
           </div>
         </div>
       </div>
-	<div class="total">
-	  <div class="column">
-		<div class="tooltip-trigger" style="display:inline-block;">
-		  <button onclick="resetFields()"><u>R</u>eset</button>
-		  <span class="tooltip-content" style="font-size:0.8rem;">Tip: You can press R to reset</span>
-		</div>
-		<span>Total XP: <strong id="totalXP">0</strong></span>
-	  </div>
-	</div>
+      <div class="total">
+        <div class="column">
+          <div class="tooltip-trigger" style="display:inline-block;">
+            <button onclick="resetFields()"><u>R</u>eset</button>
+            <span class="tooltip-content" style="font-size:0.8rem;">Tip: You can press R to reset</span>
+          </div>
+          <span>Total XP: <strong id="totalXP">0</strong></span>
+        </div>
+      </div>
     </section>
 
     <!-- CONTROLS SECTION -->
@@ -791,7 +819,7 @@
       <p><strong>Q:</strong> What doesn't this calculate?</p>
       <p><strong>A:</strong> Hunt dollars and weapon XP. Dark Tribute Bonus XP also isn't factored - this can be claimed 4 times daily at the main menu.</p><br>
       <p><strong>Q:</strong> I found a bug or error.</p>
-      <p><strong>A:</strong> You can reach me at:</p> 
+      <p><strong>A:</strong> You can reach me at:</p>
       <p>
         <a href="https://www.reddit.com/user/SopranoConcertina/" target="_blank">
           <img src="https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png" alt="Reddit" style="height:16px; vertical-align:middle; margin-right:4px;">SopranoConcertina
@@ -1027,7 +1055,7 @@
       });
     }
     
-    /* 8. Update Progress (level) using hunterXPTable */
+    /* 8. Update Progress using hunterXPTable */
     function updateProgress(effectiveXP) {
       let level = 1;
       for (let i = 0; i < hunterXPTable.length; i++) {
@@ -1040,7 +1068,7 @@
       document.getElementById("xpRemaining").textContent = remaining < 0 ? 0 : remaining;
     }
     
-    /* 9. Main updateTotal function with Start Match baseline and overflow handling */
+    /* 9. Main updateTotal function */
     function updateTotal() {
       let totalXP = 0;
       let multiplier = 1;
@@ -1048,11 +1076,9 @@
       if (!isNaN(p) && isPrestigeValid(p)) { multiplier += 0.1; }
       if (document.getElementById("dailyExtractBoost").checked) { multiplier += 0.15; }
       
-      // Add XP from checkboxes with data-xp
       document.querySelectorAll("input[type='checkbox'][data-xp]:checked").forEach(cb => {
         totalXP += parseInt(cb.getAttribute("data-xp")) * multiplier;
       });
-      // Add XP from number inputs with data-xp
       document.querySelectorAll("input[type='number'][data-xp]").forEach(input => {
         let xp = (parseInt(input.value) || 0) * parseInt(input.getAttribute("data-xp"));
         totalXP += xp * multiplier;
@@ -1079,7 +1105,6 @@
       let extractionXP = extractionSeconds > 0 ? Math.floor(extractionSeconds / 15) * 4 : 0;
       totalXP += extractionXP * multiplier;
       
-      // If Starting as Level 50 checkbox is checked, all XP goes to bonus
       if (document.getElementById("startingLevel50").checked) {
         document.getElementById("estimatedLevel").textContent = 50;
         document.getElementById("xpToNextLevel").textContent = 0;
@@ -1092,20 +1117,17 @@
         document.getElementById("bonusBloodlineXP").textContent = bonusXP;
         document.getElementById("totalXP").textContent = Math.round(totalXP);
       } else {
-        // Use Start Match Level as baseline.
         let startLevel = parseInt(document.getElementById("startMatchLevel").value) || 1;
         let baselineXP = hunterXPTable[startLevel - 1];
-        let sessionXP = totalXP; // XP earned in this session
+        let sessionXP = totalXP;
         let effectiveXP = baselineXP + sessionXP;
         
-        // Determine effective level from baseline+session XP.
         let effectiveLevel = startLevel;
         for (let i = 0; i < hunterXPTable.length; i++) {
           if (effectiveXP >= hunterXPTable[i]) { effectiveLevel = i + 1; } else { break; }
         }
         
-        // If effective XP exceeds level 50 threshold, cap leveling and add overflow to bonus.
-        let xpFor50 = hunterXPTable[49]; // XP required for level 50
+        let xpFor50 = hunterXPTable[49];
         let overflow = 0;
         let levelingSessionXP = sessionXP;
         if (effectiveXP > xpFor50) {
@@ -1119,7 +1141,6 @@
           updateProgress(effectiveXP);
         }
         
-        // Calculate bonus XP (only milestones above start level are added).
         let bonusXP = 0;
         if (document.getElementById("deathPenalty").checked) { bonusXP += sessionXP / 2; }
         if (startLevel < 4 && effectiveLevel >= 4) { bonusXP += 250; }
@@ -1135,12 +1156,10 @@
         bonusXP += bloodlineEnvelopeXP * 500;
         let retireLevel50 = parseInt(document.getElementById("retireLevel50").value) || 0;
         bonusXP += retireLevel50 * 10000;
-        // Add any XP earned after reaching level 50 into bonus XP.
         bonusXP += overflow;
         bonusXP = Math.max(0, bonusXP);
         
         document.getElementById("bonusBloodlineXP").textContent = bonusXP;
-        // Display only the session XP that contributed toward leveling (capped at level 50)
         document.getElementById("totalXP").textContent = Math.round(levelingSessionXP);
       }
     }
@@ -1164,7 +1183,7 @@
       updateTotal();
     }
     
-    /* 12. Reset Fields (including resetting Start Match Level) */
+    /* 12. Reset Fields */
     function resetFields() {
       document.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
       document.querySelectorAll("input[type='text']").forEach(input => input.value = '');
@@ -1188,15 +1207,12 @@
       document.getElementById("retireLevel50").value = 0;
       document.getElementById("startingLevel50").checked = false;
       document.getElementById("startMatchLevel").value = 1;
-      
-      // Re-enable event bounty input and its buttons.
-      document.getElementById("eventBounty") && (document.getElementById("eventBounty").disabled = false);
-      let eventBountyInput = document.getElementById("eventBounty");
-      if (eventBountyInput) {
+      if (document.getElementById("eventBounty")) {
+        document.getElementById("eventBounty").disabled = false;
+        let eventBountyInput = document.getElementById("eventBounty");
         let eventBountyButtons = eventBountyInput.parentElement.querySelectorAll("button");
         eventBountyButtons.forEach(btn => btn.disabled = false);
       }
-      
       const otherCheckboxes = [ "dailyExtractBoost", "soloClash", "duoClash", "trioClash", "cleanSweep", "Tokenpickups" ];
       enableElements(otherCheckboxes);
       document.getElementById("deathPenalty").checked = false;
@@ -1215,7 +1231,7 @@
       else if (themeIndex === 2) { document.body.classList.add("genuineLight"); }
     }
     
-    /* 14. Extraction Time State: disable if Death is checked */
+    /* 14. Extraction Time State */
     function updateExtractionTimeState() {
       let deathPenaltyChecked = document.getElementById("deathPenalty").checked;
       let extractionTimeInput = document.getElementById("extractionTime");
@@ -1226,8 +1242,12 @@
     document.addEventListener('DOMContentLoaded', function() {
       resetFields();
       updateExtractionTimeState();
-      document.getElementById("Tokenpickups") && document.getElementById("Tokenpickups").addEventListener("input", updateExtractionTimeState);
-      document.getElementById("eventBounty") && document.getElementById("eventBounty").addEventListener("input", updateExtractionTimeState);
+      if (document.getElementById("Tokenpickups")) {
+        document.getElementById("Tokenpickups").addEventListener("input", updateExtractionTimeState);
+      }
+      if (document.getElementById("eventBounty")) {
+        document.getElementById("eventBounty").addEventListener("input", updateExtractionTimeState);
+      }
       document.getElementById("deathPenalty").addEventListener("change", updateExtractionTimeState);
     });
     
@@ -1244,7 +1264,7 @@
       }
     });
     
-    // Add a global keydown listener for the "R" key to trigger reset
+    // Global keydown listener for the "R" key to trigger reset
     document.addEventListener('keydown', function(event) {
       if (event.key.toLowerCase() === 'r') {
         resetFields();

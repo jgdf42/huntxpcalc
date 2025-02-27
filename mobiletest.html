@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Soul Survivor Calc</title>
+  <title>Bounty Hunt Calc</title>
   <link rel="icon" type="image/png" href="https://www.hunterxp.com/ico.png" sizes="32x32" />
   <meta property="og:title" content="Hunter XP Calculator">
   <meta property="og:description" content="Player level calculator for the game Hunt Showdown 1896.">
@@ -18,14 +18,14 @@
   <meta name="author" content="Hunter XP">
   <meta name="robots" content="index, follow">
   <script type="application/ld+json">
-		  {
-			"@context": "https://schema.org",
-			"@type": "WebSite",
-			"name": "Hunter XP Calculator",
-			"url": "https://www.hunterxp.com",
-			"description": "A player level calculator for the game Hunt: Showdown 1896.",
-			"image": "https://www.hunterxp.com/xp.png"
-		  }
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Hunter XP Calculator",
+      "url": "https://www.hunterxp.com",
+      "description": "A player level calculator for the game Hunt: Showdown 1896.",
+      "image": "https://www.hunterxp.com/xp.png"
+    }
   </script>
   <style>
     /* RESET / BASE */
@@ -35,9 +35,8 @@
       padding: 0;
     }
     body {
-      /* Default "Dark" Theme */
-      background-color: #181716; /* near-black background */
-      color: #dcdad5;           /* light grayish text */
+      background-color: #181716;
+      color: #dcdad5;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.4;
       transition: background-color 0.3s ease, color 0.3s ease;
@@ -80,6 +79,7 @@
       border-radius: 4px;
       text-decoration: none;
       border: 1px solid #3a3732;
+      cursor: pointer;
     }
     /* STATS SECTION (Default Dark) */
     .stats-section {
@@ -108,7 +108,8 @@
       font-weight: 500;
     }
     .item input[type="number"],
-    .item input[type="text"] {
+    .item input[type="text"],
+    .item select {
       width: 60px;
       padding: 4px;
       text-align: center;
@@ -377,19 +378,16 @@
       color: black;
       text-decoration: none;
     }
-    /* Default (Dark) Theme FAQ */
     body:not(.light):not(.genuineLight) .faq-content {
       background-color: #201f1d;
       color: #dcdad5;
       border: 1px solid #3a3732;
     }
-    /* Light Theme FAQ */
     body.light .faq-content {
       background-color: #3b3937;
       color: #e2e0dc;
       border: 1px solid #605e5b;
     }
-    /* Genuine Light Theme FAQ */
     body.genuineLight .faq-content {
       background-color: #ffffff;
       color: #2c2c2c;
@@ -422,15 +420,7 @@
       font-weight: bold;
       margin-left: 4px;
     }
-    /* Mobile Browser Adjustments:
-       When a mobile browser is detected, make the font very small
-       for everything in the second section (Controls Section)
-    */
-    body.mobile .controls-section,
-    body.mobile .controls-section * {
-      font-size: 10px !important;
-    }
-    /* Mobile Browser Adjustments for PVP and Monster Kills Section */
+    /* Mobile Browser Adjustments for Monsters Section Only */
     body.mobile .creatures-section .item {
       border-width: 0.5px !important;
       padding: 4px !important;
@@ -460,9 +450,9 @@
 <body class="light" onload="resetFields()">
   <div class="container">
     <!-- HEADER -->
-	<div class="header">
-	  <div>
-        <h1>Soul Survivor Calculator</h1>
+    <div class="header">
+      <div>
+        <h1>Bounty Hunt Calculator</h1>
         <p class="subtitle">Last updated 02/27/2025
           &nbsp;&nbsp;<sup class="tooltip-trigger">
             <svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
@@ -483,17 +473,19 @@
             </span>
           </sup>
         </p>
-	  </div>
-	  <div class="right-links">
-		<a href="/" class="secondary-btn">Bounty Hunt</a>
-		<a href="/bountyclash/" class="secondary-btn">Bounty Clash</a>
-		<a href="/soulsurvivor/" class="secondary-btn"><i>Soul Survivor</i></a>
-		<button id="faqButton" class="secondary-btn">FAQ</button>
-		<a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
-		  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" class="coffee-btn">
-		</a>
-	  </div>
-	</div>
+      </div>
+      <div class="right-links">
+        <a href="/" class="secondary-btn"><i>Bounty Hunt</i></a>
+        <a href="/bountyclash/" class="secondary-btn">Bounty Clash</a>
+        <a href="/soulsurvivor/" class="secondary-btn">Soul Survivor</a>
+        <button id="faqButton" class="secondary-btn">FAQ</button>
+        <a href="https://www.buymeacoffee.com/jgdf42" target="_blank">
+          <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+               alt="Buy Me A Coffee"
+               class="coffee-btn">
+        </a>
+      </div>
+    </div>
 
     <!-- Tooltip Icon -->
     <svg style="display: none;">
@@ -501,11 +493,11 @@
         <symbol id="question-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
           <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
-        </symbol>	
-		<symbol id="chat-left-text" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-		<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-		<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-		</symbol>
+        </symbol> 
+        <symbol id="chat-left-text" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+          <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+        </symbol>
       </defs>
     </svg>
 
@@ -567,6 +559,7 @@
         </div>
       </div>
     </section>
+
     <!-- CONTROLS SECTION -->
     <section class="controls-section">
       <div class="controls-grid">
@@ -596,7 +589,7 @@
             <label>Duo VS Trio (600 XP)</label>
             <sup class="tooltip-trigger">&nbsp;&nbsp;<svg width="16" height="16">
               <use xlink:href="#question-icon"></use></svg>
-              <span class="tooltip-content"><b>Contract Bonus</b><p>Applies on extract with bounty<br><b>Accolades:</b><p>Contract Status</span>
+              <span class="tooltip-content"><b>Contract Bonus</b><p>Requires at least<br>1 Bounty Token extracted</span>
             </sup>
           </div>
           <div class="item" style="display: none;">
@@ -737,7 +730,7 @@
         </div>
       </div>
     </section>
-    <!-- CREATURES SECTION -->
+    <!-- CREATURES SECTION (Monsters / PVP & Monster Kills) -->
     <section class="creatures-section">
       <h3>PVP and Monster Kills</h3>
       <div id="creatures" class="creatures-grid">
@@ -787,7 +780,6 @@
     </div>
   </div>
 
-
   <!-- JAVASCRIPT -->
   <script>
     /* 1. Bloodline XP Table */
@@ -804,11 +796,9 @@
       86300, 87800, 89300, 90800, 92300, 93800, 95300, 96800, 98300, 99800,
       99800
     ];
-    /* 2. Creature Array */
+    /* 2. Creature Array & Insertion */
     const creatures = {
       "&nbsp;Kill Hunter": 450,
-      /* "&nbsp;Revive Partner": 100, */
-      /* "&nbsp;Kill Teammate": -500, */
       "&nbsp;Grunt": 20,
       "&nbsp;Hellhound": 40,
       "&nbsp;Hive": 60,
@@ -818,49 +808,42 @@
       "&nbsp;Waterdevil": 20,
       "&nbsp;Leech": 10
     };
-	// Insert creature items
-	let creatureContainer = document.getElementById("creatures");
-	for (let [name, xp] of Object.entries(creatures)) {
-	  let div = document.createElement("div");
-	  div.className = "item";
-	  
-	  // Remove any HTML entities and trim whitespace to compare the name.
-	  let plainName = name.replace("&nbsp;", "").trim();
-	  let maxAttr = "";
-	  let onChangeHandler = "updateTotal()"; // default onchange
-	  if (plainName === "Kill Hunter") {
-		// Set maximum to 11 and use a custom validation function.
-		maxAttr = ' max="11"';
-		onChangeHandler = "validateKillHunter(this)";
-	  }
-	  
-	  div.innerHTML = `
-		<div class="controls-line">
-		  <button onclick="adjustCount(this, -1)">-</button>
-		  <input type="number" value="0" min="0"${maxAttr} data-xp="${xp}" onchange="${onChangeHandler}">
-		  <button onclick="adjustCount(this, 1)">+</button>
-		</div>
-		<div class="creature-label">${name} (${xp} XP)</div>
-	  `;
-	  creatureContainer.appendChild(div);
-	}
-	// Limit hunters killed to 11 via manual entry
-	function validateKillHunter(input) {
-	  let value = parseInt(input.value) || 0;
-	  if (value > 11) {
-		input.value = 11;
-	  }
-	  updateTotal();
-	}
-	
-    // 3. Update Bloodline Rank & XP
+    let creatureContainer = document.getElementById("creatures");
+    for (let [name, xp] of Object.entries(creatures)) {
+      let div = document.createElement("div");
+      div.className = "item";
+      let plainName = name.replace("&nbsp;", "").trim();
+      let maxAttr = "";
+      let onChangeHandler = "updateTotal()";
+      if (plainName === "Kill Hunter") {
+        maxAttr = ' max="11"';
+        onChangeHandler = "validateKillHunter(this)";
+      }
+      div.innerHTML = `
+        <div class="controls-line">
+          <button onclick="adjustCount(this, -1)">-</button>
+          <input type="number" value="0" min="0"${maxAttr} data-xp="${xp}" onchange="${onChangeHandler}">
+          <button onclick="adjustCount(this, 1)">+</button>
+        </div>
+        <div class="creature-label">${name} (${xp} XP)</div>
+      `;
+      creatureContainer.appendChild(div);
+    }
+    function validateKillHunter(input) {
+      let value = parseInt(input.value) || 0;
+      if (value > 11) {
+        input.value = 11;
+      }
+      updateTotal();
+    }
+    // 3. Update Bloodline XP
     function updateBloodlineXP() {
       let rank = parseInt(document.getElementById("bloodlineRank").value) || 1;
       if (rank > 100) {
-		  rank = 1;
-		} else {
-		  rank = Math.max(1, rank);
-		}
+        rank = 1;
+      } else {
+        rank = Math.max(1, rank);
+      }
       document.getElementById("bloodlineRank").value = rank;
       let bloodlineXP = bloodlineXPTable[rank - 1];
       document.getElementById("estimatedBloodlineXP").textContent = bloodlineXP;
@@ -868,8 +851,6 @@
       document.getElementById("xpToRank100").textContent = Math.max(0, xpToRank100);
       updateTotal();
     }
-
-    // Hunter XP Envelopes (no multiplier)
     let envelopeXP = parseInt(document.getElementById("envelopeXP").value) || 0;
     if (envelopeXP < 0) {
       envelopeXP = 0;
@@ -878,7 +859,6 @@
       envelopeXP = 50;
       document.getElementById("envelopeXP").value = 50;
     }
-    // Bloodline XP Envelopes (no multiplier)
     let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
     if (bloodlineEnvelopeXP < 0) {
       bloodlineEnvelopeXP = 0;
@@ -887,14 +867,13 @@
       bloodlineEnvelopeXP = 50;
       document.getElementById("bloodlineEnvelopeXP").value = 50;
     }
-    // 4. adjustCount for plus/minus
+    // 4. adjustCount for Plus/Minus Buttons
     function adjustCount(button, change) {
       let input = button.parentElement.querySelector("input");
       let min = parseInt(input.min) || 0;
       let max = parseInt(input.max) || Infinity;
       let newValue = Math.min(max, Math.max(min, parseInt(input.value) + change));
       input.value = newValue;
-      // Exclusivity: bosskills vs solobosskills
       if (input.id === "bosskills" && newValue > 0) {
         document.getElementById("solobosskills").value = 0;
       } else if (input.id === "solobosskills" && newValue > 0) {
@@ -917,7 +896,7 @@
       clearTimeout(updateTotalTimeout);
       updateTotalTimeout = setTimeout(updateTotal, 200);
     }
-    // 6. Validate inputs for min/max
+    // 6. Validate Other Inputs
     function validateRiftInput() {
       let riftpickupsInput = document.getElementById("riftpickups");
       let value = parseInt(riftpickupsInput.value) || 0;
@@ -1124,7 +1103,6 @@
         }
         bonusXP += ftBonus;
       }
-	  
       let estimatedLevel = parseInt(document.getElementById("estimatedLevel").textContent) || 1;
       if (estimatedLevel >= 4) bonusXP += 250;
       if (estimatedLevel >= 8) bonusXP += 250;
@@ -1134,12 +1112,10 @@
       if (estimatedLevel >= 34) bonusXP += 500;
       if (estimatedLevel >= 42) bonusXP += 750;
       if (estimatedLevel >= 50) bonusXP += 1000;
-	  
       let overflow = totalXP - 21100;
       if (overflow > 0) {
         bonusXP += overflow;
       }
-	  
       let bloodlineEnvelopeXP = parseInt(document.getElementById("bloodlineEnvelopeXP").value) || 0;
       bonusXP += bloodlineEnvelopeXP * 500;
       let retireLevel50 = parseInt(document.getElementById("retireLevel50").value) || 0;

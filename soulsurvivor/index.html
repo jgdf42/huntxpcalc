@@ -415,6 +415,27 @@
     a:visited {
       color: inherit;
     }
+	.new-badge {
+	  display: inline-block;
+	  background-color: red;
+	  color: white;
+	  border-radius: 4px;
+	  padding: 2px 6px;
+	  font-size: 0.75em;
+	  font-weight: bold;
+	  box-shadow: 0 0 3px rgba(255, 0, 0, 0.8);
+	  margin-left: 4px;
+	}
+	.beta-badge {
+	  display: inline-block;
+	  background-color: orange;
+	  color: white;
+	  border-radius: 4px;
+	  padding: 2px 6px;
+	  font-size: 0.75em;
+	  font-weight: bold;
+	  margin-left: 4px;
+	}
   </style>
 </head>
 <body class="light" onload="resetFields()">
@@ -423,20 +444,23 @@
 	<div class="header">
 	  <div>
 <h1>Soul Survivor Calculator</h1>
-		<p class="subtitle">Last updated 02/25/2025
-		&nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
-              <span class="tooltip-content">
-                <b>Changelog:</b><br>• Refined math on Extraction Time Remaining<br><br>
-									 • Increased Clean Sweep max to 2<br><br>
-									 • Changed 250 Bloodline XP milestone from<br>
-									    Level 9 to 8 (UI shows 9 in-game, but<br>
-										awards on 8 due to bug?)<br><br>
-									 • Renamed Bounty Tokens Extracted to<br>Boss Bounty Tokens Extracted<br><br>
-									 • Added Event Bounty Tokens Extracted<br><br>
-									 • Added Event Hunter XP Envelopes<br><br>
-									 • Limited envelope maximum to 50<br><br>
-									 • XP To Next Level now shows only <br>1 digit after decimal<br>
-              </span>
+        <p class="subtitle">Last updated 02/27/2025
+          &nbsp;&nbsp;<sup class="tooltip-trigger"><svg width="16" height="16"><use xlink:href="#chat-left-text"></use></svg>
+            <span class="tooltip-content">
+			  <b>Known Issues:</b><br>• XP ranges for levels slightly<br>out of sync due to no published numbers by Crytek.<br><br>
+              <b>Changelog:</b><br>• Added "Start At Level" feature <span class="beta-badge">BETA</span><span class="new-badge">NEW!</span><br><br>
+			  • Pressing R on keyboard now resets all fields <span class="new-badge">NEW!</span><br><br>
+			  • Refined math on Extraction Time Remaining<br><br>
+              • Increased Clean Sweep max to 2<br><br>
+              • Changed 250 Bloodline XP milestone from<br>
+                Level 9 to 8 (UI shows 9 in-game, but<br>
+                awards on 8 due to bug?)<br><br>
+              • Renamed Bounty Tokens Extracted to<br>Boss Bounty Tokens Extracted<br><br>
+              • Added Event Bounty Tokens Extracted<br><br>
+              • Added Event Hunter XP Envelopes<br><br>
+              • Limited envelope maximum to 50<br><br>
+              • XP To Next Level now shows only <br>1 digit after decimal<br>
+            </span>
             </sup></p>
 	  </div>
 	  <div class="right-links">
@@ -508,12 +532,15 @@
           </div>
         </div>
       </div>
-      <div class="total">
-        <div class="column">
-          <button onclick="resetFields()">Reset</button>
-          <span>Total XP: <strong id="totalXP">0</strong></span>
-        </div>
-      </div>
+		<div class="total">
+		  <div class="column">
+			<div class="tooltip-trigger" style="display:inline-block;">
+			  <button onclick="resetFields()"><u>R</u>eset</button>
+			  <span class="tooltip-content" style="font-size:0.8rem;">Tip: You can press R to reset</span>
+			</div>
+			<span>Total XP: <strong id="totalXP">0</strong></span>
+		  </div>
+		</div>
     </section>
     <!-- CONTROLS SECTION -->
     <section class="controls-section">
@@ -1223,7 +1250,7 @@ totalXP += bloodlineEnvelopeXP * 500;
       resetFields();
     });
 	
-	    /* FAQ Modal JavaScript */
+    /* FAQ Modal JavaScript */
     document.getElementById("faqButton").addEventListener("click", function() {
       document.getElementById("faqModal").style.display = "block";
     });
@@ -1233,6 +1260,13 @@ totalXP += bloodlineEnvelopeXP * 500;
     window.addEventListener("click", function(event) {
       if (event.target == document.getElementById("faqModal")) {
         document.getElementById("faqModal").style.display = "none";
+      }
+    });
+    
+    // Add a global keydown listener for the "R" key to trigger reset
+    document.addEventListener('keydown', function(event) {
+      if (event.key.toLowerCase() === 'r') {
+        resetFields();
       }
     });
   </script>

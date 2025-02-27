@@ -413,7 +413,40 @@
 	  font-weight: bold;
 	  margin-left: 4px;
 	}
+    /* Mobile Browser Adjustments:
+       When a mobile browser is detected, make the font very small
+       for everything in the second section (Controls Section)
+    */
+    body.mobile .controls-section,
+    body.mobile .controls-section * {
+      font-size: 10px !important;
+    }
+    /* Mobile Browser Adjustments for PVP and Monster Kills Section */
+    body.mobile .creatures-section .item {
+      border-width: 0.5px !important;
+      padding: 4px !important;
+    }
+    body.mobile .creatures-section .controls-line button {
+      padding: 2px 4px !important;
+      font-size: 0.7rem !important;
+    }
+    body.mobile .creatures-section .controls-line input[type="number"] {
+      width: 30px !important;
+      font-size: 0.7rem !important;
+      padding: 2px !important;
+    }
+    body.mobile .creatures-section .creature-label {
+      font-size: 0.7rem !important;
+    }
   </style>
+  <script>
+    // Detect mobile browsers based on user agent and add a "mobile" class to the body
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("mobile");
+      });
+    }
+  </script>
 </head>
 <body class="light" onload="resetFields()">
   <div class="container">

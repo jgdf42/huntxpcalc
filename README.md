@@ -21,13 +21,4 @@ https://jgdf42.github.io/huntxpcalc/
 
 **Q: I found a bug or error.**  
 **A:** You can reach me at:  
-[![Reddit](https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png) SopranoConcertina](https://www.reddit.com/user/SopranoConcertina/) or [![Discord](https://i.imgur.com/hIxR9DX.png) anthonyjsoprano](http://discordapp.com/users/658685123549593601)
-
-**Q: Can I buy you a coffee?**  
-**A:** Absolutely – coffee fuels creativity! I've dedicated many hours to building this calculator for fellow Hunters, and every little bit helps keep it updated and ready for future events.
-
-If you'd like to support my work or if this helped you, consider buying me a coffee:  
-[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/jgdf42)
-
-Thanks a bunch, see you on the bayou!
-
+[![Discord](https://i.imgur.com/hIxR9DX.png) anthonyjsoprano](http://discordapp.com/users/658685123549593601)

@@ -18,7 +18,3 @@ https://jgdf42.github.io/huntxpcalc/
 
 **Q: What doesn't this calculate?**  
 **A:** Hunt dollars and weapon XP. Dark Tribute Bonus XP also isn't factored – this can be claimed 4 times daily at the main menu.
-
-**Q: I found a bug or error.**  
-**A:** You can reach me at:  
-[![Discord](https://i.imgur.com/hIxR9DX.png) anthonyjsoprano](http://discordapp.com/users/658685123549593601)
